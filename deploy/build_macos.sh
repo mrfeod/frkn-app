@@ -20,9 +20,9 @@ BUILD_DIR=$DEPLOY_DIR/build
 echo "Project dir: ${PROJECT_DIR}" 
 echo "Build dir: ${BUILD_DIR}"
 
-APP_NAME=AmneziaVPN
+APP_NAME=FRKN
 APP_FILENAME=$APP_NAME.app
-APP_DOMAIN=org.frknvpn.package
+APP_DOMAIN=org.frkn.package
 PLIST_NAME=$APP_NAME.plist
 
 OUT_APP_DIR=$BUILD_DIR/client
@@ -79,7 +79,7 @@ if [ "${MAC_CERT_PW+x}" ]; then
 
   CERTIFICATE_P12=$DEPLOY_DIR/PrivacyTechAppleCertDeveloperId.p12
   WWDRCA=$DEPLOY_DIR/WWDRCA.cer
-  KEYCHAIN=amnezia.build.macos.keychain
+  KEYCHAIN=frkn.build.macos.keychain
   TEMP_PASS=tmp_pass
 
   security create-keychain -p $TEMP_PASS $KEYCHAIN || true
@@ -147,7 +147,7 @@ fi
 
 echo "Building DMG installer..."
 # Allow Terminal to make changes in Privacy & Security > App Management
-hdiutil create -size 256mb -volname AmneziaVPN -srcfolder $BUILD_DIR/installer/$APP_NAME.app -ov -format UDZO $DMG_FILENAME
+hdiutil create -size 256mb -volname FRKN -srcfolder $BUILD_DIR/installer/$APP_NAME.app -ov -format UDZO $DMG_FILENAME
 
 if [ "${MAC_CERT_PW+x}" ]; then
   echo "Signing DMG installer..."
