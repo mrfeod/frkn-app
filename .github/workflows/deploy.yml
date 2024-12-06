@@ -410,6 +410,9 @@ jobs:
       run: |
         echo $KEYSTORE_BASE64 | base64 --decode > android.keystore
 
+    - name: 'Install Ninja'
+      run: sudo apt-get install ninja-build
+
     - name: 'Build project'
       env:
         ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
