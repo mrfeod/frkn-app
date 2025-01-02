@@ -76,7 +76,7 @@ PageType {
             implicitWidth: listview.width
             implicitHeight: col.implicitHeight
 
-            property alias portTextField: portTextField
+            property alias vpnAddressSubnetTextField: vpnAddressSubnetTextField
             property bool isEnabled: ServersModel.isProcessedServerHasWriteAccess()
 
             ColumnLayout {
@@ -98,9 +98,29 @@ PageType {
                 }
 
                 TextFieldWithHeaderType {
-                    id: portTextField
+                    id: vpnAddressSubnetTextField
+
                     Layout.fillWidth: true
                     Layout.topMargin: 40
+
+                    enabled: delegateItem.isEnabled
+
+                    headerText: qsTr("VPN address subnet")
+                    textFieldText: subnetAddress
+
+                    textField.onEditingFinished: {
+                        if (textFieldText !== subnetAddress) {
+                            subnetAddress = textFieldText
+                        }
+                    }
+
+                    checkEmptyText: true
+                }
+
+                TextFieldWithHeaderType {
+                    id: portTextField
+                    Layout.fillWidth: true
+                    Layout.topMargin: 16
 
                     enabled: delegateItem.isEnabled
 
@@ -332,7 +352,8 @@ PageType {
                              junkPacketMaxSizeTextField.errorText === "" &&
                              junkPacketMinSizeTextField.errorText === "" &&
                              junkPacketCountTextField.errorText === "" &&
-                             portTextField.errorText === ""
+                             portTextField.errorText === "" &&
+                             vpnAddressSubnetTextField.errorText === ""
 
                     text: qsTr("Save")
 

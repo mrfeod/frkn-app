@@ -16,7 +16,7 @@ import "../Components"
 PageType {
     id: root
 
-    defaultActiveFocusItem: listview.currentItem.mtuTextField.textField
+    //defaultActiveFocusItem: listview.currentItem.mtuTextField.textField
 
     Item {
         id: focusItem
