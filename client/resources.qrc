@@ -21,6 +21,7 @@
         <file>images/controls/edit-3.svg</file>
         <file>images/controls/eye-off.svg</file>
         <file>images/controls/eye.svg</file>
+        <file>images/controls/external-link.svg</file>
         <file>images/controls/file-check-2.svg</file>
         <file>images/controls/file-cog-2.svg</file>
         <file>images/controls/folder-open.svg</file>
@@ -116,6 +117,7 @@
         <file>server_scripts/xray/run_container.sh</file>
         <file>server_scripts/xray/start.sh</file>
         <file>server_scripts/xray/template.json</file>
+        <file>ui/qml/Components/AdLabel.qml</file>
         <file>ui/qml/Components/ConnectButton.qml</file>
         <file>ui/qml/Components/ConnectionTypeSelectionDrawer.qml</file>
         <file>ui/qml/Components/HomeContainersListView.qml</file>

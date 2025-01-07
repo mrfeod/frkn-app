@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 import SortFilterProxyModel 0.2
 
@@ -42,8 +43,18 @@ PageType {
             objectName: "homeColumnLayout"
 
             anchors.fill: parent
-            anchors.topMargin: 34
-            anchors.bottomMargin: 34
+            anchors.topMargin: 12
+            anchors.bottomMargin: 16
+
+            AdLabel {
+                id: adLabel
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: adLabel.contentHeight
+                Layout.leftMargin: 16
+                Layout.rightMargin: 16
+                Layout.bottomMargin: 22
+            }
 
             BasicButtonType {
                 id: loggingButton
@@ -86,7 +97,6 @@ PageType {
                 objectName: "splitTunnelingButton"
 
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                Layout.bottomMargin: 34
                 leftPadding: 16
                 rightPadding: 16
 
