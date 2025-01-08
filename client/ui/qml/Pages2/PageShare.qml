@@ -355,6 +355,7 @@ PageType {
                             serverSelectorListView.selectedIndex = 0
                         }
 
+                        serverSelectorListView.positionViewAtIndex(selectedIndex, ListView.Beginning)
                         serverSelectorListView.triggerCurrentItem()
                     }
 
@@ -410,6 +411,7 @@ PageType {
                         function onSeverSelectorIndexChanged() {
                             var defaultContainer = proxyContainersModel.mapFromSource(ServersModel.getProcessedServerData("defaultContainer"))
                             protocolSelectorListView.selectedIndex = defaultContainer
+                            protocolSelectorListView.positionViewAtIndex(selectedIndex, ListView.Beginning)
                             protocolSelectorListView.triggerCurrentItem()
                         }
                     }
@@ -603,6 +605,7 @@ PageType {
                 }
 
                 clip: true
+                interactive: false
                 reuseItems: true
 
                 delegate: Item {
@@ -667,7 +670,11 @@ PageType {
                                 ParagraphTextType {
                                     color: AmneziaStyle.color.mutedGray
                                     visible: creationDate
-                                    Layout.fillWidth: true
+                                    Layout.maximumWidth: parent.width
+
+                                    maximumLineCount: 2
+                                    wrapMode: Text.Wrap
+                                    elide: Qt.ElideRight
 
                                     text: qsTr("Creation date: %1").arg(creationDate)
                                 }
@@ -675,7 +682,11 @@ PageType {
                                 ParagraphTextType {
                                     color: AmneziaStyle.color.mutedGray
                                     visible: latestHandshake
-                                    Layout.fillWidth: true
+                                    Layout.maximumWidth: parent.width
+
+                                    maximumLineCount: 2
+                                    wrapMode: Text.Wrap
+                                    elide: Qt.ElideRight
 
                                     text: qsTr("Latest handshake: %1").arg(latestHandshake)
                                 }
@@ -683,7 +694,11 @@ PageType {
                                 ParagraphTextType {
                                     color: AmneziaStyle.color.mutedGray
                                     visible: dataReceived
-                                    Layout.fillWidth: true
+                                    Layout.maximumWidth: parent.width
+
+                                    maximumLineCount: 2
+                                    wrapMode: Text.Wrap
+                                    elide: Qt.ElideRight
 
                                     text: qsTr("Data received: %1").arg(dataReceived)
                                 }
@@ -691,7 +706,11 @@ PageType {
                                 ParagraphTextType {
                                     color: AmneziaStyle.color.mutedGray
                                     visible: dataSent
-                                    Layout.fillWidth: true
+                                    Layout.maximumWidth: parent.width
+
+                                    maximumLineCount: 2
+                                    wrapMode: Text.Wrap
+                                    elide: Qt.ElideRight
 
                                     text: qsTr("Data sent: %1").arg(dataSent)
                                 }
@@ -699,7 +718,9 @@ PageType {
                                 ParagraphTextType {
                                     color: AmneziaStyle.color.mutedGray
                                     visible: allowedIps
-                                    Layout.fillWidth: true
+                                    Layout.maximumWidth: parent.width
+
+                                    wrapMode: Text.Wrap
 
                                     text: qsTr("Allowed IPs: %1").arg(allowedIps)
                                 }
