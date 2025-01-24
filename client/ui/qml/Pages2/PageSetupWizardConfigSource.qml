@@ -163,12 +163,12 @@ PageType {
                 Layout.rightMargin: 16
                 Layout.leftMargin: 16
 
-                visible: textKey.textFieldText !== ""
+                visible: textKey.textField.text !== ""
 
                 text: qsTr("Continue")
 
                 clickedFunc: function() {
-                    if (ImportController.extractConfigFromData(textKey.textFieldText)) {
+                    if (ImportController.extractConfigFromData(textKey.textField.text)) {
                         PageController.goToPage(PageEnum.PageSetupWizardViewConfig)
                     }
                 }

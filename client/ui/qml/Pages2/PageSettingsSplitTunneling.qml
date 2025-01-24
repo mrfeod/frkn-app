@@ -274,13 +274,13 @@ PageType {
             Layout.fillWidth: true
             rightButtonClickedOnEnter: true
 
-            textFieldPlaceholderText: qsTr("website or IP")
+            textField.placeholderText: qsTr("website or IP")
             buttonImageSource: "qrc:/images/controls/plus.svg"
 
             clickedFunc: function() {
                 PageController.showBusyIndicator(true)
-                SitesController.addSite(textFieldText)
-                textFieldText = ""
+                SitesController.addSite(textField.text)
+                textField.text = ""
                 PageController.showBusyIndicator(false)
             }
         }

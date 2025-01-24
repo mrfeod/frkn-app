@@ -67,7 +67,7 @@ PageType {
                 Layout.fillWidth: true
                 headerText: qsTr("Primary DNS")
 
-                textFieldText: SettingsController.primaryDns
+                textField.text: SettingsController.primaryDns
                 textField.validator: RegularExpressionValidator {
                     regularExpression: InstallController.ipAddressRegExp()
                 }
@@ -79,7 +79,7 @@ PageType {
                 Layout.fillWidth: true
                 headerText: qsTr("Secondary DNS")
 
-                textFieldText: SettingsController.secondaryDns
+                textField.text: SettingsController.secondaryDns
                 textField.validator: RegularExpressionValidator {
                     regularExpression: InstallController.ipAddressRegExp()
                 }
@@ -105,9 +105,9 @@ PageType {
 
                     var yesButtonFunction = function() {
                         SettingsController.primaryDns = "1.1.1.1"
-                        primaryDns.textFieldText = SettingsController.primaryDns
+                        primaryDns.textField.text = SettingsController.primaryDns
                         SettingsController.secondaryDns = "1.0.0.1"
-                        secondaryDns.textFieldText = SettingsController.secondaryDns
+                        secondaryDns.textField.text = SettingsController.secondaryDns
                         PageController.showNotificationMessage(qsTr("Settings have been reset"))
                     }
                     var noButtonFunction = function() {
@@ -125,11 +125,11 @@ PageType {
                 text: qsTr("Save")
 
                 clickedFunc: function() {
-                    if (primaryDns.textFieldText !== SettingsController.primaryDns) {
-                        SettingsController.primaryDns = primaryDns.textFieldText
+                    if (primaryDns.textField.text !== SettingsController.primaryDns) {
+                        SettingsController.primaryDns = primaryDns.textField.text
                     }
-                    if (secondaryDns.textFieldText !== SettingsController.secondaryDns) {
-                        SettingsController.secondaryDns = secondaryDns.textFieldText
+                    if (secondaryDns.textField.text !== SettingsController.secondaryDns) {
+                        SettingsController.secondaryDns = secondaryDns.textField.text
                     }
                     PageController.showNotificationMessage(qsTr("Settings saved"))
                 }

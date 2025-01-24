@@ -142,7 +142,7 @@ PageType {
 
                     Layout.fillWidth: true
                     headerText: qsTr("Server name")
-                    textFieldText: root.processedServer.name
+                    textField.text: root.processedServer.name
                     textField.maximumLength: 30
                     checkEmptyText: true
                 }
@@ -155,12 +155,12 @@ PageType {
                     text: qsTr("Save")
 
                     clickedFunc: function() {
-                        if (serverName.textFieldText === "") {
+                        if (serverName.textField.text === "") {
                             return
                         }
 
-                        if (serverName.textFieldText !== root.processedServer.name) {
-                            ServersModel.setProcessedServerData("name", serverName.textFieldText);
+                        if (serverName.textField.text !== root.processedServer.name) {
+                            ServersModel.setProcessedServerData("name", serverName.textField.text);
                         }
                         serverNameEditDrawer.closeTriggered()
                     }
