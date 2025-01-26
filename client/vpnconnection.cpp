@@ -215,10 +215,15 @@ ErrorCode VpnConnection::lastError() const
 void VpnConnection::connectToVpn(int serverIndex, const ServerCredentials &credentials, DockerContainer container,
                                  const QJsonObject &vpnConfiguration)
 {
-    qDebug() << QString("ConnectToVpn, Server index is %1, container is %2, route mode is")
+    qDebug() << QString("Trying to connect to VPN, server index is %1, container is %2")
                         .arg(serverIndex)
-                        .arg(ContainerProps::containerToString(container))
-             << m_settings->routeMode();
+                        .arg(ContainerProps::containerToString(container));
+    qDebug() << QString("Site split tunneling is %1, route mode is %2")
+                        .arg(m_settings->isSitesSplitTunnelingEnabled() ? "enabled" : "diabled")
+                        .arg(m_settings->routeMode());
+    qDebug() << QString("App split tunneling is %1, route mode is %2")
+                        .arg(m_settings->isAppsSplitTunnelingEnabled() ? "enabled" : "diabled")
+                        .arg(m_settings->getAppsRouteMode());
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     if (!m_IpcClient) {
         m_IpcClient = new IpcClient(this);
