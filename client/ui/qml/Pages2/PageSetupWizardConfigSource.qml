@@ -217,6 +217,8 @@ PageType {
                 Layout.alignment: Qt.AlignHCenter
                 implicitHeight: 32
 
+                visible: Qt.platform.os !== "ios"
+
                 defaultColor: AmneziaStyle.color.transparent
                 hoveredColor: AmneziaStyle.color.translucentWhite
                 pressedColor: AmneziaStyle.color.sheerWhite
@@ -330,7 +332,7 @@ PageType {
         property string title: qsTr("I have nothing")
         property string description: qsTr("")
         property string imageSource: "qrc:/images/controls/help-circle.svg"
-        property bool isVisible: PageController.isStartPageVisible()
+        property bool isVisible: PageController.isStartPageVisible() && Qt.platform.os !== "ios"
         property var handler: function() {
             Qt.openUrlExternally(LanguageModel.getCurrentSiteUrl())
         }
