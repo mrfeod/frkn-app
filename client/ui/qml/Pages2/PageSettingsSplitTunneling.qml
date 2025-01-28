@@ -338,7 +338,6 @@ PageType {
 
             LabelWithButtonType {
                 id: exportSitesButton
-                enabled: !SettingsController.isOnTv()
                 Layout.fillWidth: true
                 text: qsTr("Save site list")
 
@@ -362,9 +361,7 @@ PageType {
                 }
             }
 
-            DividerType {
-                enabled: !SettingsController.isOnTv()
-            }
+            DividerType {}
         }
     }
 
