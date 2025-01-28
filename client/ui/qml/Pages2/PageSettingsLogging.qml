@@ -137,6 +137,8 @@ PageType {
                 Layout.topMargin: -8
                 Layout.bottomMargin: -8
 
+                visible: !GC.isMobile()
+
                 text: qsTr("Open logs folder")
                 leftImageSource: "qrc:/images/controls/folder-open.svg"
                 isSmallLeftImage: true

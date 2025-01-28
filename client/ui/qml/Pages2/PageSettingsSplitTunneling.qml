@@ -274,13 +274,13 @@ PageType {
             Layout.fillWidth: true
             rightButtonClickedOnEnter: true
 
-            textFieldPlaceholderText: qsTr("website or IP")
+            textField.placeholderText: qsTr("website or IP")
             buttonImageSource: "qrc:/images/controls/plus.svg"
 
             clickedFunc: function() {
                 PageController.showBusyIndicator(true)
-                SitesController.addSite(textFieldText)
-                textFieldText = ""
+                SitesController.addSite(textField.text)
+                textField.text = ""
                 PageController.showBusyIndicator(false)
             }
         }
@@ -338,7 +338,6 @@ PageType {
 
             LabelWithButtonType {
                 id: exportSitesButton
-                enabled: !SettingsController.isOnTv()
                 Layout.fillWidth: true
                 text: qsTr("Save site list")
 
@@ -362,9 +361,7 @@ PageType {
                 }
             }
 
-            DividerType {
-                enabled: !SettingsController.isOnTv()
-            }
+            DividerType {}
         }
     }
 

@@ -51,25 +51,25 @@ PageType {
 
             switch (type) {
             case PageShare.ConfigType.AmneziaConnection: {
-                ExportController.generateConnectionConfig(clientNameTextField.textFieldText);
+                ExportController.generateConnectionConfig(clientNameTextField.textField.text);
                 break;
             }
             case PageShare.ConfigType.OpenVpn: {
-                ExportController.generateOpenVpnConfig(clientNameTextField.textFieldText)
+                ExportController.generateOpenVpnConfig(clientNameTextField.textField.text)
                 shareConnectionDrawer.configCaption = qsTr("Save OpenVPN config")
                 shareConnectionDrawer.configExtension = ".ovpn"
                 shareConnectionDrawer.configFileName = "amnezia_for_openvpn"
                 break
             }
             case PageShare.ConfigType.WireGuard: {
-                ExportController.generateWireGuardConfig(clientNameTextField.textFieldText)
+                ExportController.generateWireGuardConfig(clientNameTextField.textField.text)
                 shareConnectionDrawer.configCaption = qsTr("Save WireGuard config")
                 shareConnectionDrawer.configExtension = ".conf"
                 shareConnectionDrawer.configFileName = "amnezia_for_wireguard"
                 break
             }
             case PageShare.ConfigType.Awg: {
-                ExportController.generateAwgConfig(clientNameTextField.textFieldText)
+                ExportController.generateAwgConfig(clientNameTextField.textField.text)
                 shareConnectionDrawer.configCaption = qsTr("Save AmneziaWG config")
                 shareConnectionDrawer.configExtension = ".conf"
                 shareConnectionDrawer.configFileName = "amnezia_for_awg"
@@ -90,7 +90,7 @@ PageType {
                 break
             }
             case PageShare.ConfigType.Xray: {
-                ExportController.generateXrayConfig(clientNameTextField.textFieldText)
+                ExportController.generateXrayConfig(clientNameTextField.textField.text)
                 shareConnectionDrawer.configCaption = qsTr("Save XRay config")
                 shareConnectionDrawer.configExtension = ".json"
                 shareConnectionDrawer.configFileName = "amnezia_for_xray"
@@ -296,7 +296,7 @@ PageType {
                 visible: accessTypeSelector.currentIndex === 0
 
                 headerText: qsTr("User name")
-                textFieldText: "New client"
+                textField.text: "New client"
                 textField.maximumLength: 20
 
                 checkEmptyText: true
@@ -525,7 +525,7 @@ PageType {
                 parentFlickable: a
 
                 clickedFunc: function(){
-                    if (clientNameTextField.textFieldText !== "") {
+                    if (clientNameTextField.textField.text !== "") {
                         ExportController.generateConfig(root.connectionTypesModel[exportTypeSelector.currentIndex].type)
                     }
                 }
@@ -555,14 +555,14 @@ PageType {
                     id: searchTextField
                     Layout.fillWidth: true
 
-                    textFieldPlaceholderText: qsTr("Search")
+                    textField.placeholderText: qsTr("Search")
 
                     Keys.onEscapePressed: {
                         root.isSearchBarVisible = false
                     }
 
                     function navigateTo() {
-                        if (searchTextField.textFieldText === "") {
+                        if (searchTextField.textField.text === "") {
                             root.isSearchBarVisible = false
                         }
                     }
@@ -601,7 +601,7 @@ PageType {
                     sourceModel: ClientManagementModel
                     filters: RegExpFilter {
                         roleName: "clientName"
-                        pattern: ".*" + searchTextField.textFieldText + ".*"
+                        pattern: ".*" + searchTextField.textField.text + ".*"
                         caseSensitivity: Qt.CaseInsensitive
                     }
                 }
@@ -765,7 +765,7 @@ PageType {
                                                 id: clientNameEditor
                                                 Layout.fillWidth: true
                                                 headerText: qsTr("Client name")
-                                                textFieldText: clientName
+                                                textField.text: clientName
                                                 textField.maximumLength: 20
                                                 checkEmptyText: true
                                             }
@@ -778,14 +778,14 @@ PageType {
                                                 text: qsTr("Save")
 
                                                 clickedFunc: function() {
-                                                    if (clientNameEditor.textFieldText === "") {
+                                                    if (clientNameEditor.textField.text === "") {
                                                         return
                                                     }
 
-                                                    if (clientNameEditor.textFieldText !== clientName) {
+                                                    if (clientNameEditor.textField.text !== clientName) {
                                                         PageController.showBusyIndicator(true)
                                                         ExportController.renameClient(index,
-                                                                                      clientNameEditor.textFieldText,
+                                                                                      clientNameEditor.textField.text,
                                                                                       ContainersModel.getProcessedContainerIndex(),
                                                                                       ServersModel.getProcessedServerCredentials())
                                                         PageController.showBusyIndicator(false)

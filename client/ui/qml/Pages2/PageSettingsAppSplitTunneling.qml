@@ -252,7 +252,7 @@ PageType {
 
             Layout.fillWidth: true
 
-            textFieldPlaceholderText: qsTr("application name")
+            textField.placeholderText: qsTr("application name")
             buttonImageSource: "qrc:/images/controls/plus.svg"
 
             rightButtonClickedOnEnter: true
