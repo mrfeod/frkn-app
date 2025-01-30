@@ -50,8 +50,8 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Amnezia VPN needs access to the camera for reading QR-codes.</string>
-	<key>NSAppTransportSecurity</key>
+	<string>FRKN needs access to the camera for reading QR-codes.</string>
+        <key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
@@ -70,7 +70,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Amnezia VPN config</string>
+			<string>FRKN config</string>
 			<key>UTTypeIconFiles</key>
 			<array/>
 			<key>UTTypeIdentifier</key>
@@ -162,7 +162,7 @@
         <array>
                 <dict>
                         <key>CFBundleTypeName</key>
-                        <string>Amnezia VPN config</string>
+                        <string>FRKN config</string>
                         <key>LSHandlerRank</key>
                         <string>Alternate</string>
                         <key>LSItemContentTypes</key>
