@@ -297,7 +297,17 @@ PageType {
 
                         onClicked: {
                             ServersModel.processedIndex = ServersModel.defaultIndex
-                            PageController.goToPage(PageEnum.PageSettingsServerInfo)
+
+                            if (ServersModel.getProcessedServerData("isServerFromGatewayApi")) {
+                                if (ServersModel.getProcessedServerData("isCountrySelectionAvailable")) {
+                                    PageController.goToPage(PageEnum.PageSettingsApiAvailableCountries)
+
+                                } else {
+                                    PageController.goToPage(PageEnum.PageSettingsApiServerInfo)
+                                }
+                            } else {
+                                PageController.goToPage(PageEnum.PageSettingsServerInfo)
+                            }
                         }
                     }
                 }

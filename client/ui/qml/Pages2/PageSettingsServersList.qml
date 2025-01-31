@@ -93,7 +93,17 @@ PageType {
 
                     clickedFunction: function() {
                         ServersModel.processedIndex = index
-                        PageController.goToPage(PageEnum.PageSettingsServerInfo)
+
+                        if (ServersModel.getProcessedServerData("isServerFromGatewayApi")) {
+                            if (ServersModel.getProcessedServerData("isCountrySelectionAvailable")) {
+                                PageController.goToPage(PageEnum.PageSettingsApiAvailableCountries)
+
+                            } else {
+                                PageController.goToPage(PageEnum.PageSettingsApiServerInfo)
+                            }
+                        } else {
+                            PageController.goToPage(PageEnum.PageSettingsServerInfo)
+                        }
                     }
                 }
 

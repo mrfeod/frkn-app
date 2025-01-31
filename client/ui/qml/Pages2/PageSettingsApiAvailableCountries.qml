@@ -3,6 +3,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
+import SortFilterProxyModel 0.2
+
 import PageEnum 1.0
 import Style 1.0
 
@@ -15,20 +17,84 @@ import "../Components"
 PageType {
     id: root
 
+    property var processedServer
+
+    Connections {
+        target: ServersModel
+
+        function onProcessedServerChanged() {
+            root.processedServer = proxyServersModel.get(0)
+        }
+    }
+
+    SortFilterProxyModel {
+        id: proxyServersModel
+        objectName: "proxyServersModel"
+
+        sourceModel: ServersModel
+        filters: [
+            ValueFilter {
+                roleName: "isCurrentlyProcessed"
+                value: true
+            }
+        ]
+
+        Component.onCompleted: {
+            root.processedServer = proxyServersModel.get(0)
+        }
+    }
+
     ListView {
         id: menuContent
 
         property bool isFocusable: true
 
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
+
+        ScrollBar.vertical: ScrollBarType {}
 
         clip: true
-        interactive: true
+        reuseItems: true
+        snapMode: ListView.SnapToItem
+
         model: ApiCountryModel
+
+        currentIndex: 0
 
         ButtonGroup {
             id: containersRadioButtonGroup
+        }
+
+        header: ColumnLayout {
+            width: menuContent.width
+
+            spacing: 4
+
+            BackButtonType {
+                id: backButton
+                objectName: "backButton"
+
+                Layout.topMargin: 20
+            }
+
+            HeaderType {
+                id: headerContent
+                objectName: "headerContent"
+
+                Layout.fillWidth: true
+                Layout.leftMargin: 16
+                Layout.rightMargin: 16
+                Layout.bottomMargin: 10
+
+                actionButtonImage: "qrc:/images/controls/settings.svg"
+
+                headerText: root.processedServer.name
+                descriptionText: ApiServicesModel.getSelectedServiceData("serviceDescription")
+
+                actionButtonFunction: function() {
+                    PageController.goToPage(PageEnum.PageSettingsApiServerInfo)
+                }
+            }
         }
 
         delegate: ColumnLayout {

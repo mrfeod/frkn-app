@@ -3,6 +3,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
+import SortFilterProxyModel 0.2
+
 import PageEnum 1.0
 import Style 1.0
 
@@ -54,11 +56,39 @@ PageType {
         readonly property string objectImageSource: "qrc:/images/controls/gauge.svg"
     }
 
+    property var processedServer
+
+    Connections {
+        target: ServersModel
+
+        function onProcessedServerChanged() {
+            root.processedServer = proxyServersModel.get(0)
+        }
+    }
+
+    SortFilterProxyModel {
+        id: proxyServersModel
+        objectName: "proxyServersModel"
+
+        sourceModel: ServersModel
+        filters: [
+            ValueFilter {
+                roleName: "isCurrentlyProcessed"
+                value: true
+            }
+        ]
+
+        Component.onCompleted: {
+            root.processedServer = proxyServersModel.get(0)
+        }
+    }
+
     ListView {
         id: listView
-        anchors.fill: parent
 
         property bool isFocusable: true
+
+        anchors.fill: parent
 
         Keys.onTabPressed: {
             FocusController.nextKeyTabItem()
@@ -86,9 +116,54 @@ PageType {
 
         ScrollBar.vertical: ScrollBarType {}
 
-        model: labelsModel
         clip: true
         reuseItems: true
+        snapMode: ListView.SnapToItem
+
+        model: labelsModel
+
+        header: ColumnLayout {
+            width: listView.width
+
+            spacing: 4
+
+            BackButtonType {
+                id: backButton
+                objectName: "backButton"
+
+                Layout.topMargin: 20
+            }
+
+            HeaderType {
+                id: headerContent
+                objectName: "headerContent"
+
+                Layout.fillWidth: true
+                Layout.leftMargin: 16
+                Layout.rightMargin: 16
+                Layout.bottomMargin: 10
+
+                actionButtonImage: "qrc:/images/controls/edit-3.svg"
+
+                headerText: root.processedServer.name
+                descriptionText: ApiServicesModel.getSelectedServiceData("serviceDescription")
+
+                actionButtonFunction: function() {
+                    serverNameEditDrawer.openTriggered()
+                }
+            }
+
+            RenameServerDrawer {
+                id: serverNameEditDrawer
+
+                parent: root
+
+                anchors.fill: parent
+                expandedHeight: root.height * 0.35
+
+                serverNameText: root.processedServer.name
+            }
+        }
 
         delegate: ColumnLayout {
             width: listView.width
