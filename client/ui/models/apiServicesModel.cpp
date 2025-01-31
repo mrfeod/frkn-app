@@ -255,7 +255,7 @@ ApiServicesModel::ApiServicesData ApiServicesModel::getApiServicesData(const QJs
     serviceData.type = serviceType;
     serviceData.protocol = serviceProtocol;
 
-    serviceData.storeEndpoint = serviceInfo.value(configKey::storeEndpoint).toString();
+    serviceData.storeEndpoint = data.value(configKey::storeEndpoint).toString();
 
     if (data.value(configKey::isAvailable).isBool()) {
         serviceData.isServiceAvailable = data.value(configKey::isAvailable).toBool();
