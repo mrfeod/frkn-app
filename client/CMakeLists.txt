@@ -57,7 +57,8 @@ if(WIN32 OR (APPLE AND NOT IOS) OR (LINUX AND NOT ANDROID))
 endif()
 
 qt_standard_project_setup()
-qt_add_executable(${PROJECT} MANUAL_FINALIZATION)
+qt_add_executable(${PROJECT} MANUAL_FINALIZATION
+    core/controllers/gatewayController.h core/controllers/gatewayController.cpp)
 
 if(WIN32 OR (APPLE AND NOT IOS) OR (LINUX AND NOT ANDROID))
     qt_add_repc_replicas(${PROJECT} ${CMAKE_CURRENT_LIST_DIR}/../ipc/ipc_interface.rep)

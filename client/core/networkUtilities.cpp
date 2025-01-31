@@ -107,6 +107,26 @@ QStringList NetworkUtilities::summarizeRoutes(const QStringList &ips, const QStr
     return QStringList();
 }
 
+amnezia::ErrorCode NetworkUtilities::checkNetworkReplyErrors(const QList<QSslError> &sslErrors, QNetworkReply *reply)
+{
+    if (!sslErrors.empty()) {
+        qDebug().noquote() << sslErrors;
+        return amnezia::ErrorCode::ApiConfigSslError;
+    } else if (reply->error() == QNetworkReply::NoError) {
+        return amnezia::ErrorCode::NoError;
+    } else if (reply->error() == QNetworkReply::NetworkError::OperationCanceledError
+               || reply->error() == QNetworkReply::NetworkError::TimeoutError) {
+        return amnezia::ErrorCode::ApiConfigTimeoutError;
+    } else {
+        QString err = reply->errorString();
+        qDebug() << QString::fromUtf8(reply->readAll());
+        qDebug() << reply->error();
+        qDebug() << err;
+        qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+        return amnezia::ErrorCode::ApiConfigDownloadError;
+    }
+}
+
 QString NetworkUtilities::getIPAddress(const QString &host)
 {
     QHostAddress address(host);

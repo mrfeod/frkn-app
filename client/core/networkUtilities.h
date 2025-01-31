@@ -5,6 +5,9 @@
 #include <QRegExp>
 #include <QString>
 #include <QHostAddress>
+#include <QNetworkReply>
+
+#include "core/defs.h"
 
 
 class NetworkUtilities : public QObject
@@ -30,6 +33,8 @@ public:
     static QString ipAddressFromIpWithSubnet(const QString ip);
 
     static QStringList summarizeRoutes(const QStringList &ips, const QString cidr);
+
+    static amnezia::ErrorCode checkNetworkReplyErrors(const QList<QSslError> &sslErrors, QNetworkReply *reply);
 
 };
 
