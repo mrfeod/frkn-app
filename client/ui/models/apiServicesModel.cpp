@@ -146,13 +146,6 @@ void ApiServicesModel::updateModel(const QJsonObject &data)
     } else {
         for (const auto &service : services) {
             auto serviceObject = service.toObject();
-
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-            if (serviceObject.value(configKey::serviceType).toString() == serviceType::amneziaPremium) {
-                continue;
-            }
-#endif
-
             m_services.push_back(getApiServicesData(serviceObject));
         }
     }
