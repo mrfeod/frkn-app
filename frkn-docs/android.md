@@ -12,5 +12,5 @@ export ANDROID_KEYSTORE_KEY_ALIAS="frkn-key"
 
 Build apks
 ```bash
-./deploy/build_android.sh -a all -m
+./deploy/build_android.sh -aab --apk all -m
 ```
