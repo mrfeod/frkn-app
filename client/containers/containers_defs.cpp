@@ -113,17 +113,16 @@ QMap<DockerContainer, QString> ContainerProps::containerDescriptions()
                QObject::tr("Shadowsocks masks VPN traffic, making it resemble normal web traffic, but it may still be detected by certain analysis systems.") },
              { DockerContainer::Cloak,
                QObject::tr("OpenVPN over Cloak - OpenVPN with VPN masquerading as web traffic and protection against "
-                           "active-probing detection. It is very resistant to detection and blockages, but offers low speed.") },
+                           "active-probing detection. It is very resistant to detection, but offers low speed.") },
              { DockerContainer::WireGuard,
                QObject::tr("WireGuard - popular VPN protocol with high performance, high speed and low power "
                            "consumption.") },
              { DockerContainer::Awg,
                QObject::tr("AmneziaWG is a special protocol from Amnezia based on WireGuard. "
-                           "It is as fast as WireGuard but highly resistant to blocking. "
-                           "Recommended for most cases.") },
+                           "It provides high connection speed and ensures stable operation even in the most challenging network conditions.") },
              { DockerContainer::Xray,
                QObject::tr("XRay with REALITY masks VPN traffic as web traffic and protects against active probing. "
-                           "It is highly resistant to DPI detection and offers high speed.") },
+                           "It is highly resistant to detection and offers high speed.") },
              { DockerContainer::Ipsec,
                QObject::tr("IKEv2/IPsec -  Modern stable protocol, a bit faster than others, restores connection after "
                            "signal loss. It has native support on the latest versions of Android and iOS.") },
@@ -154,7 +153,7 @@ QMap<DockerContainer, QString> ContainerProps::containerDetailedDescriptions()
                   "* Available in the AmneziaVPN across all platforms\n"
                   "* Normal power consumption on mobile devices\n"
                   "* Flexible customisation to suit user needs to work with different operating systems and devices\n"
-                  "* Recognised by DPI analysis systems and therefore susceptible to blocking\n"
+                  "* Recognised by DPI systems and therefore susceptible to blocking\n"
                   "* Can operate over both TCP and UDP network protocols.") },
         { DockerContainer::ShadowSocks,
           QObject::tr("Shadowsocks, inspired by the SOCKS5 protocol, safeguards the connection using the AEAD cipher. "
@@ -170,7 +169,7 @@ QMap<DockerContainer, QString> ContainerProps::containerDetailedDescriptions()
                       "protecting against detection.\n\n"
                       "OpenVPN provides a secure VPN connection by encrypting all internet traffic between the client "
                       "and the server.\n\n"
-                      "Cloak protects OpenVPN from detection and blocking. \n\n"
+                      "Cloak protects OpenVPN from detection. \n\n"
                       "Cloak can modify packet metadata so that it completely masks VPN traffic as normal web traffic, "
                       "and also protects the VPN from detection by Active Probing. This makes it very resistant to "
                       "being detected\n\n"
@@ -180,7 +179,7 @@ QMap<DockerContainer, QString> ContainerProps::containerDetailedDescriptions()
                       "* Available in the AmneziaVPN across all platforms\n"
                       "* High power consumption on mobile devices\n"
                       "* Flexible settings\n"
-                      "* Not recognised by DPI analysis systems\n"
+                      "* Not recognised by detection systems\n"
                       "* Works over TCP network protocol, 443 port.\n") },
         { DockerContainer::WireGuard,
           QObject::tr("A relatively new popular VPN protocol with a simplified architecture.\n"
@@ -209,7 +208,7 @@ QMap<DockerContainer, QString> ContainerProps::containerDetailedDescriptions()
                       "* Available in the AmneziaVPN across all platforms\n"
                       "* Low power consumption\n"
                       "* Minimum number of settings\n"
-                      "* Not recognised by DPI analysis systems, resistant to blocking\n"
+                      "* Not recognised by traffic analysis systems\n"
                       "* Works over UDP network protocol.") },
         { DockerContainer::Xray,
                 QObject::tr("The REALITY protocol, a pioneering development by the creators of XRay, "
@@ -219,7 +218,7 @@ QMap<DockerContainer, QString> ContainerProps::containerDetailedDescriptions()
                             "This advanced capability differentiates REALITY from similar technologies by its ability to disguise web traffic as coming from random, "
                             "legitimate sites without the need for specific configurations. \n"
                             "Unlike older protocols such as VMess, VLESS, and the XTLS-Vision transport, "
-                            "REALITY's innovative \"friend or foe\" recognition at the TLS handshake enhances security and circumvents detection by sophisticated DPI systems employing active probing techniques. "
+                            "REALITY's innovative \"friend or foe\" recognition at the TLS handshake enhances security. "
                             "This makes REALITY a robust solution for maintaining internet freedom.")
         },
         { DockerContainer::Ipsec,
@@ -344,8 +343,8 @@ QString ContainerProps::easySetupHeader(DockerContainer container)
 QString ContainerProps::easySetupDescription(DockerContainer container)
 {
     switch (container) {
-    case DockerContainer::Awg: return tr("AmneziaWG protocol will be installed. Special protocol from Amnezia, based on WireGuard. It's fast like WireGuard, "
-                                         "but very resistant to blockages.");
+    case DockerContainer::Awg: return tr("AmneziaWG protocol will be installed. "
+                                         "It provides high connection speed and ensures stable operation even in the most challenging network conditions.");
     default: return "";
     }
 }
