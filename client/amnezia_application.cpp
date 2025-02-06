@@ -504,7 +504,7 @@ void AmneziaApplication::initControllers()
 
               for (auto &server : servers) {
                 QString description = server["description"].toString();
-                QRegularExpression re("([A-Z]{2}-\\d+)");
+                QRegularExpression re("([A-Z]{2}.*)");
                 QRegularExpressionMatch match = re.match(description);
                 if (match.hasMatch()) {
                   description = match.captured(1);

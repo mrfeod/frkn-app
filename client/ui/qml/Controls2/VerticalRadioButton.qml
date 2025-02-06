@@ -118,31 +118,35 @@ RadioButton {
 
             spacing: 4
 
-            ListItemTitleType {
-                text: root.text
-                maximumLineCount: root.textMaximumLineCount
-                elide: root.textElide
-
-                color: {
-                    if (root.checked) {
-                        return selectedTextColor
-                    }
-                    return textColor
-                }
-
-                Layout.fillWidth: true
-
-                Behavior on color {
-                    PropertyAnimation { duration: 200 }
-                }
-            }
-
-            RowLayout {
+             RowLayout {
                 spacing: 8
 
                 Image {
                     source: "qrc:/countriesFlags/images/flagKit/" + countryCode + ".svg"
                 }
+
+                ListItemTitleType {
+                    text: root.text
+                    maximumLineCount: root.textMaximumLineCount
+                    elide: root.textElide
+
+                    color: {
+                        if (root.checked) {
+                            return selectedTextColor
+                        }
+                        return textColor
+                    }
+
+                    Layout.fillWidth: true
+
+                    Behavior on color {
+                        PropertyAnimation { duration: 200 }
+                    }
+                }
+            }
+
+            RowLayout {
+                spacing: 8
 
                 CaptionTextType {
                     id: description

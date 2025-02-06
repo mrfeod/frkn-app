@@ -217,6 +217,12 @@ PageType {
                         }
                     }
 
+                    Image {
+                        Layout.rightMargin: 8
+                        visible: source !== ""
+                        source: ServersModel.defaultServerImagePathCollapsed
+                    }
+
                     Header1TextType {
                         id: collapsedButtonHeader
                         Layout.maximumWidth: drawer.width - 48 - 18 - 12
@@ -269,12 +275,6 @@ PageType {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     Layout.bottomMargin: drawer.isCollapsed ? 44 : ServersModel.isDefaultServerFromApi ? 89 : 44
                     spacing: 0
-
-                    Image {
-                        Layout.rightMargin: 8
-                        visible: source !== ""
-                        source: ServersModel.defaultServerImagePathCollapsed
-                    }
 
                     LabelTextType {
                         id: collapsedServerMenuDescription
