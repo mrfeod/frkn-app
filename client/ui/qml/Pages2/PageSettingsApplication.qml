@@ -134,7 +134,7 @@ PageType {
 
             SwitcherType {
                 id: switcherAutoConnect
-                visible: !GC.isMobile()
+                visible: false //!GC.isMobile() // TODO disabled until autoconnect with autoupdate will be resolved
 
                 Layout.fillWidth: true
                 Layout.margins: 16

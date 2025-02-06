@@ -64,21 +64,13 @@ void FrknApiController::connectUser(const QString &token) {
 }
 
 bool FrknApiController::checkForUpdates() {
-  QDateTime lastUpdateCheck = m_settings->lastUpdateCheck();
-  QDateTime now = QDateTime::currentDateTimeUtc();
-  const int oneDayUpdateInterval = 60 * 60 * 24;
-  if (lastUpdateCheck.isValid() &&
-      lastUpdateCheck.secsTo(now) > oneDayUpdateInterval) {
-    qDebug() << "Checking for updates";
-    QString token = m_settings->frknToken();
-    if (!token.isEmpty()) {
-      connectUser(token);
-      return true;
-    } else {
-      qWarning() << "No token found, skipping update check";
-    }
+  qDebug() << "Checking for updates";
+  QString token = m_settings->frknToken();
+  if (!token.isEmpty()) {
+    connectUser(token);
+    return true;
   } else {
-    qDebug() << "Skipping update check";
+    qWarning() << "No token found, skipping update check";
   }
   return false;
 }
