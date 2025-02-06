@@ -25,6 +25,8 @@
 #include "ui/controllers/sitesController.h"
 #include "ui/controllers/systemController.h"
 #include "ui/controllers/appSplitTunnelingController.h"
+// #include "ui/controllers/api/importController.h"
+#include "ui/controllers/api/apiSettingsController.h"
 #include "ui/models/containers_model.h"
 #include "ui/models/languageModel.h"
 #include "ui/models/protocols/cloakConfigModel.h"
@@ -48,6 +50,7 @@
 #include "ui/models/appSplitTunnelingModel.h"
 #include "ui/models/apiServicesModel.h"
 #include "ui/models/apiCountryModel.h"
+#include "ui/models/api/apiAccountInfoModel.h"
 
 #define amnApp (static_cast<AmneziaApplication *>(QCoreApplication::instance()))
 
@@ -104,6 +107,7 @@ private:
     QSharedPointer<ClientManagementModel> m_clientManagementModel;
     QSharedPointer<ApiServicesModel> m_apiServicesModel;
     QSharedPointer<ApiCountryModel> m_apiCountryModel;
+    QSharedPointer<ApiAccountInfoModel> m_apiAccountInfoModel;
 
     QScopedPointer<OpenVpnConfigModel> m_openVpnConfigModel;
     QScopedPointer<ShadowSocksConfigModel> m_shadowSocksConfigModel;
@@ -114,7 +118,6 @@ private:
 #ifdef Q_OS_WINDOWS
     QScopedPointer<Ikev2ConfigModel> m_ikev2ConfigModel;
 #endif
-
     QScopedPointer<SftpConfigModel> m_sftpConfigModel;
     QScopedPointer<Socks5ProxyConfigModel> m_socks5ConfigModel;
 
@@ -134,6 +137,8 @@ private:
     QScopedPointer<SitesController> m_sitesController;
     QScopedPointer<SystemController> m_systemController;
     QScopedPointer<AppSplitTunnelingController> m_appSplitTunnelingController;
+
+    QScopedPointer<ApiSettingsController> m_apiSettingsController;
 
     QNetworkAccessManager *m_nam;
 

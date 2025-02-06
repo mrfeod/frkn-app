@@ -8,8 +8,8 @@
 #include "amnezia_application.h"
 #include "configurators/wireguard_configurator.h"
 #include "core/enums/apiEnums.h"
-#include "version.h"
 #include "gatewayController.h"
+#include "version.h"
 
 namespace
 {
@@ -213,10 +213,29 @@ void ApiController::updateServerConfigFromApi(const QString &installationUuid, c
     }
 }
 
+ErrorCode ApiController::getAccountInfo(const QString &userCountryCode, const QString &serviceType, const QJsonObject &authData,
+                                        QByteArray &responseBody)
+{
+    GatewayController gatewayController(m_gatewayEndpoint, m_isDevEnvironment, requestTimeoutMsecs);
+
+    QJsonObject apiPayload;
+    apiPayload[configKey::userCountryCode] = userCountryCode;
+    apiPayload[configKey::serviceType] = serviceType;
+    apiPayload[configKey::authData] = authData;
+
+    ErrorCode errorCode = gatewayController.post(QString("%1v1/account_info"), apiPayload, responseBody);
+
+    return errorCode;
+}
+
 ErrorCode ApiController::getServicesList(QByteArray &responseBody)
 {
     GatewayController gatewayController(m_gatewayEndpoint, m_isDevEnvironment, requestTimeoutMsecs);
-    ErrorCode errorCode = gatewayController.get("%1v1/services", responseBody);
+
+    QJsonObject apiPayload;
+    apiPayload[configKey::osVersion] = QSysInfo::productType();
+
+    ErrorCode errorCode = gatewayController.post(QString("%1v1/services"), apiPayload, responseBody);
     if (errorCode == ErrorCode::NoError) {
         if (!responseBody.contains("services")) {
             return ErrorCode::ApiServicesMissingError;
@@ -251,6 +270,27 @@ ErrorCode ApiController::getConfigForService(const QString &installationUuid, co
     if (errorCode == ErrorCode::NoError) {
         fillServerConfig(protocol, apiPayloadData, responseBody, serverConfig);
     }
+
+    return errorCode;
+}
+
+ErrorCode ApiController::getNativeConfig(const QString &userCountryCode, const QString &serviceType, const QString &protocol,
+                                         const QString &serverCountryCode, const QJsonObject &authData, QString &nativeConfig)
+{
+    GatewayController gatewayController(m_gatewayEndpoint, m_isDevEnvironment, requestTimeoutMsecs);
+
+    ApiPayloadData apiPayloadData = generateApiPayloadData(protocol);
+
+    QJsonObject apiPayload = fillApiPayload(protocol, apiPayloadData);
+    apiPayload[configKey::userCountryCode] = userCountryCode;
+    apiPayload[configKey::serverCountryCode] = serverCountryCode;
+    apiPayload[configKey::serviceType] = serviceType;
+    apiPayload[configKey::authData] = authData;
+
+    QByteArray responseBody;
+    ErrorCode errorCode = gatewayController.post(QString("%1v1/country_config"), apiPayload, responseBody);
+
+    nativeConfig = responseBody;
 
     return errorCode;
 }

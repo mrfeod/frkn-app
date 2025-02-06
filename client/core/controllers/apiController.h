@@ -19,9 +19,14 @@ public:
 public slots:
     void updateServerConfigFromApi(const QString &installationUuid, const int serverIndex, QJsonObject serverConfig);
 
+    ErrorCode getAccountInfo(const QString &userCountryCode, const QString &serviceType, const QJsonObject &authData,
+                             QByteArray &responseBody);
     ErrorCode getServicesList(QByteArray &responseBody);
     ErrorCode getConfigForService(const QString &installationUuid, const QString &userCountryCode, const QString &serviceType,
-                                  const QString &protocol, const QString &serverCountryCode, const QJsonObject &authData, QJsonObject &serverConfig);
+                                  const QString &protocol, const QString &serverCountryCode, const QJsonObject &authData,
+                                  QJsonObject &serverConfig);
+    ErrorCode getNativeConfig(const QString &userCountryCode, const QString &serviceType, const QString &protocol,
+                              const QString &serverCountryCode, const QJsonObject &authData, QString &nativeConfig);
 
 signals:
     void errorOccurred(ErrorCode errorCode);

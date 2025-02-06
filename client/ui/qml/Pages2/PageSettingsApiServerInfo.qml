@@ -18,26 +18,17 @@ PageType {
     id: root
 
     property list<QtObject> labelsModel: [
-        regionObject,
-        priceObject,
+        statusObject,
         endDateObject,
-        speedObject
+        deviceCountObject
     ]
 
     QtObject {
-        id: regionObject
+        id: statusObject
 
-        readonly property string title: qsTr("For the region")
-        readonly property string contentKey: "region"
+        readonly property string title: qsTr("Subscription status")
+        readonly property string contentKey: "subscriptionStatus"
         readonly property string objectImageSource: "qrc:/images/controls/map-pin.svg"
-    }
-
-    QtObject {
-        id: priceObject
-
-        readonly property string title: qsTr("Price")
-        readonly property string contentKey: "price"
-        readonly property string objectImageSource: "qrc:/images/controls/tag.svg"
     }
 
     QtObject {
@@ -49,10 +40,10 @@ PageType {
     }
 
     QtObject {
-        id: speedObject
+        id: deviceCountObject
 
-        readonly property string title: qsTr("Speed")
-        readonly property string contentKey: "speed"
+        readonly property string title: qsTr("Connected devices")
+        readonly property string contentKey: "connectedDevices"
         readonly property string objectImageSource: "qrc:/images/controls/gauge.svg"
     }
 
@@ -83,42 +74,10 @@ PageType {
         }
     }
 
-    ListView {
+    ListViewType {
         id: listView
 
-        property bool isFocusable: true
-
         anchors.fill: parent
-
-        Keys.onTabPressed: {
-            FocusController.nextKeyTabItem()
-        }
-
-        Keys.onBacktabPressed: {
-            FocusController.previousKeyTabItem()
-        }
-
-        Keys.onUpPressed: {
-            FocusController.nextKeyUpItem()
-        }
-
-        Keys.onDownPressed: {
-            FocusController.nextKeyDownItem()
-        }
-
-        Keys.onLeftPressed: {
-            FocusController.nextKeyLeftItem()
-        }
-
-        Keys.onRightPressed: {
-            FocusController.nextKeyRightItem()
-        }
-
-        ScrollBar.vertical: ScrollBarType {}
-
-        clip: true
-        reuseItems: true
-        snapMode: ListView.SnapToItem
 
         model: labelsModel
 
@@ -175,7 +134,7 @@ PageType {
 
                 imageSource: objectImageSource
                 leftText: title
-                rightText: ApiServicesModel.getSelectedServiceData(contentKey)
+                rightText: ApiAccountInfoModel.data(contentKey)
 
                 visible: rightText !== ""
             }
@@ -185,52 +144,60 @@ PageType {
             width: listView.width
             spacing: 0
 
-            ParagraphTextType {
-                Layout.fillWidth: true
-                Layout.rightMargin: 16
-                Layout.leftMargin: 16
-
-                onLinkActivated: function(link) {
-                    Qt.openUrlExternally(link)
-                }
-                textFormat: Text.RichText
-                text: {
-                    var text = ApiServicesModel.getSelectedServiceData("features")
-                    if (text === undefined) {
-                        return ""
-                    }
-                    return text.replace("%1", LanguageModel.getCurrentSiteUrl())
-                }
-
-                visible: text !== ""
-
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.NoButton
-                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                }
-            }
-
             LabelWithButtonType {
-                id: supportUuid
                 Layout.fillWidth: true
+                Layout.topMargin: 32
 
-                text: qsTr("Support tag")
-                descriptionText: SettingsController.getInstallationUuid()
+                visible: false
 
-                descriptionOnTop: true
-
-                rightImageSource: "qrc:/images/controls/copy.svg"
-                rightImageColor: AmneziaStyle.color.paleGray
+                text: qsTr("Subscription key")
+                rightImageSource: "qrc:/images/controls/chevron-right.svg"
 
                 clickedFunction: function() {
-                    GC.copyToClipBoard(descriptionText)
-                    PageController.showNotificationMessage(qsTr("Copied"))
-                    if (!GC.isMobile()) {
-                        this.rightButton.forceActiveFocus()
-                    }
                 }
             }
+
+            DividerType {}
+
+            LabelWithButtonType {
+                Layout.fillWidth: true
+
+                text: qsTr("Configuration files")
+
+                descriptionText: qsTr("To connect the router")
+                rightImageSource: "qrc:/images/controls/chevron-right.svg"
+
+                clickedFunction: function() {
+                }
+            }
+
+            DividerType {}
+
+            LabelWithButtonType {
+                Layout.fillWidth: true
+
+                text: qsTr("Support")
+                rightImageSource: "qrc:/images/controls/chevron-right.svg"
+
+                clickedFunction: function() {
+                    PageController.goToPage(PageEnum.PageSettingsApiSupport)
+                }
+            }
+
+            DividerType {}
+
+            LabelWithButtonType {
+                Layout.fillWidth: true
+
+                text: qsTr("How to connect on another devicey")
+                rightImageSource: "qrc:/images/controls/chevron-right.svg"
+
+                clickedFunction: function() {
+                    PageController.goToPage(PageEnum.PageSettingsApiInstructions)
+                }
+            }
+
+            DividerType {}
 
             BasicButtonType {
                 id: resetButton

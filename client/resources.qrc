@@ -225,6 +225,9 @@
         <file>ui/qml/Pages2/PageShareFullAccess.qml</file>
         <file>ui/qml/Pages2/PageStart.qml</file>
         <file>ui/qml/Components/RenameServerDrawer.qml</file>
+        <file>ui/qml/Controls2/ListViewType.qml</file>
+        <file>ui/qml/Pages2/PageSettingsApiSupport.qml</file>
+        <file>ui/qml/Pages2/PageSettingsApiInstructions.qml</file>
     </qresource>
     <qresource prefix="/countriesFlags">
         <file>images/flagKit/ZW.svg</file>

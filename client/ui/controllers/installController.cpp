@@ -832,6 +832,7 @@ bool InstallController::updateServiceFromApi(const int serverIndex, const QStrin
     auto authData = serverConfig.value(configKey::authData).toObject();
 
     QJsonObject newServerConfig;
+
     ErrorCode errorCode = apiController.getConfigForService(
             m_settings->getInstallationUuid(true), apiConfig.value(configKey::userCountryCode).toString(),
             apiConfig.value(configKey::serviceType).toString(), apiConfig.value(configKey::serviceProtocol).toString(), newCountryCode,

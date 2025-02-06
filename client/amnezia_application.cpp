@@ -378,6 +378,9 @@ void AmneziaApplication::initModels()
     });
     connect(m_serversModel.get(), &ServersModel::updateApiServicesModel, this,
             [this]() { m_apiServicesModel->updateModel(m_serversModel->getProcessedServerData("apiConfig").toJsonObject()); });
+
+    m_apiAccountInfoModel.reset(new ApiAccountInfoModel(this));
+    m_engine->rootContext()->setContextProperty("ApiAccountInfoModel", m_apiAccountInfoModel.get());
 }
 
 void AmneziaApplication::initControllers()
@@ -463,4 +466,7 @@ void AmneziaApplication::initControllers()
 
     m_systemController.reset(new SystemController(m_settings));
     m_engine->rootContext()->setContextProperty("SystemController", m_systemController.get());
+
+    m_apiSettingsController.reset(new ApiSettingsController(m_serversModel, m_apiAccountInfoModel, m_settings));
+    m_engine->rootContext()->setContextProperty("ApiSettingsController", m_apiSettingsController.get());
 }

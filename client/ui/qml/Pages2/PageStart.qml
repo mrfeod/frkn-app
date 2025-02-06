@@ -154,6 +154,16 @@ PageType {
             PageController.goToPageHome()
             PageController.showNotificationMessage(message)
         }
+
+        function onRemoveProcessedServerFinished(finishedMessage) {
+            if (!ServersModel.getServersCount()) {
+                PageController.goToPageHome()
+            } else {
+                PageController.goToStartPage()
+                PageController.goToPage(PageEnum.PageSettingsServersList)
+            }
+            PageController.showNotificationMessage(finishedMessage)
+        }
     }
 
     Connections {
