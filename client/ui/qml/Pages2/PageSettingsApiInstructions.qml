@@ -20,31 +20,67 @@ PageType {
         id: windows
 
         readonly property string title: qsTr("Windows")
-        readonly property string imageSource: "qrc:/images/controls/external-link.svg"
-        readonly property var handler: function() {
-            Qt.openUrlExternally(LanguageModel.getCurrentSiteUrl())
-        }
+        readonly property string link: qsTr("")
+    }
+
+    QtObject {
+        id: macos
+
+        readonly property string title: qsTr("macOS")
+        readonly property string link: qsTr("")
+    }
+
+    QtObject {
+        id: android
+
+        readonly property string title: qsTr("Android")
+        readonly property string link: qsTr("")
+    }
+
+    QtObject {
+        id: androidTv
+
+        readonly property string title: qsTr("AndroidTV")
+        readonly property string link: qsTr("")
+    }
+
+    QtObject {
+        id: ios
+
+        readonly property string title: qsTr("iOS")
+        readonly property string link: qsTr("")
     }
 
     QtObject {
         id: linux
 
-        readonly property string title: qsTr("Windows")
-        readonly property string imageSource: "qrc:/images/controls/external-link.svg"
-        readonly property var handler: function() {
-            Qt.openUrlExternally(LanguageModel.getCurrentSiteUrl())
-        }
+        readonly property string title: qsTr("Linux")
+        readonly property string link: qsTr("")
+    }
+
+    QtObject {
+        id: routers
+
+        readonly property string title: qsTr("Routers")
+        readonly property string link: qsTr("")
     }
 
     property list<QtObject> instructionsModel: [
         windows,
-        linux
+        macos,
+        android,
+        androidTv,
+        ios,
+        linux,
+        routers
     ]
 
     ListViewType {
         id: listView
 
         anchors.fill: parent
+        anchors.topMargin: 20
+        anchors.bottomMargin: 24
 
         model: instructionsModel
 
@@ -62,8 +98,8 @@ PageType {
                 Layout.rightMargin: 16
                 Layout.leftMargin: 16
 
-                headerText: "Support"
-                descriptionText: qsTr("Our technical support specialists are ready to help you at any time")
+                headerText: qsTr("How to connect on another device")
+                descriptionText: qsTr("Instructions on the Amnezia website")
             }
         }
 
@@ -76,9 +112,11 @@ PageType {
                 Layout.topMargin: 6
 
                 text: title
-                leftImageSource: imageSource
+                rightImageSource: "qrc:/images/controls/external-link.svg"
 
-                clickedFunction: handler
+                clickedFunction: function() {
+                    Qt.openUrlExternally(link)
+                }
             }
 
             DividerType {}

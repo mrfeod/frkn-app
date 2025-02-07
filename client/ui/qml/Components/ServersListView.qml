@@ -112,11 +112,13 @@ ListView {
                         ServersModel.processedIndex = index
 
                         if (ServersModel.getProcessedServerData("isServerFromGatewayApi")) {
-                            ApiSettingsController.getAccountInfo()
-
                             if (ServersModel.getProcessedServerData("isCountrySelectionAvailable")) {
                                 PageController.goToPage(PageEnum.PageSettingsApiAvailableCountries)
                             } else {
+                                PageController.showBusyIndicator(true)
+                                ApiSettingsController.getAccountInfo()
+                                PageController.showBusyIndicator(false)
+
                                 PageController.goToPage(PageEnum.PageSettingsApiServerInfo)
                             }
                         } else {

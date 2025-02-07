@@ -5,6 +5,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+#include "core/api/apiDefs.h"
+
 class ApiAccountInfoModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -27,29 +29,23 @@ public slots:
     void updateModel(const QJsonObject &accountInfoObject, const QJsonObject &serverConfig);
     QVariant data(const QString &roleString);
 
+    QJsonArray getAvailableCountries();
+
 protected:
     QHash<int, QByteArray> roleNames() const override;
 
 private:
-    struct CountryInfo
-    {
-        QString serverCountryCode;
-        QString serverCountryName;
-        QString lastUpdated;
-    };
-
     struct AccountInfoData
     {
         QString subscriptionEndDate;
         int activeDeviceCount;
         int maxDeviceCount;
 
-        QString vpnKey;
-
-        QVector<CountryInfo> AvailableCountries;
+        apiDefs::ConfigType configType;
     };
 
     AccountInfoData m_accountInfoData;
+    QJsonArray m_availableCountries;
 };
 
 #endif // APIACCOUNTINFOMODEL_H

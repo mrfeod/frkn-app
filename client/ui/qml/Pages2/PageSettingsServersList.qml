@@ -95,7 +95,9 @@ PageType {
                         ServersModel.processedIndex = index
 
                         if (ServersModel.getProcessedServerData("isServerFromGatewayApi")) {
+                            PageController.showBusyIndicator(true)
                             ApiSettingsController.getAccountInfo()
+                            PageController.showBusyIndicator(false)
 
                             PageController.goToPage(PageEnum.PageSettingsApiServerInfo)
                         } else {

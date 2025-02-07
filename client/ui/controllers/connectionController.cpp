@@ -8,7 +8,7 @@
 #include <QtConcurrent>
 
 #include "core/controllers/vpnConfigurationController.h"
-#include "core/enums/apiEnums.h"
+#include "core/api/apiDefs.h"
 #include "version.h"
 
 ConnectionController::ConnectionController(const QSharedPointer<ServersModel> &serversModel,
@@ -48,15 +48,15 @@ void ConnectionController::openConnection()
 
     emit m_vpnConnection->connectionStateChanged(Vpn::ConnectionState::Preparing);
 
-    if (configVersion == ApiConfigSources::Telegram
+    if (configVersion == apiDefs::ConfigSource::Telegram
         && !m_serversModel->data(serverIndex, ServersModel::Roles::HasInstalledContainers).toBool()) {
         emit updateApiConfigFromTelegram();
-        } else if (configVersion == ApiConfigSources::AmneziaGateway
+        } else if (configVersion == apiDefs::ConfigSource::AmneziaGateway
         && !m_serversModel->data(serverIndex, ServersModel::Roles::HasInstalledContainers).toBool()) {
         emit updateApiConfigFromGateway();
     } else if (configVersion && m_serversModel->isApiKeyExpired(serverIndex)) {
         qDebug() << "attempt to update api config by expires_at event";
-        if (configVersion == ApiConfigSources::Telegram) {
+        if (configVersion == apiDefs::ConfigSource::Telegram) {
             emit updateApiConfigFromTelegram();
         } else {
             emit updateApiConfigFromGateway();

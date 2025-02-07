@@ -35,6 +35,7 @@ namespace PageLoader
         PageSettingsApiAvailableCountries,
         PageSettingsApiSupport,
         PageSettingsApiInstructions,
+        PageSettingsApiNativeConfigs,
 
         PageServiceSftpSettings,
         PageServiceTorWebsiteSettings,

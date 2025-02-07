@@ -25,7 +25,7 @@
 #include "ui/controllers/sitesController.h"
 #include "ui/controllers/systemController.h"
 #include "ui/controllers/appSplitTunnelingController.h"
-// #include "ui/controllers/api/importController.h"
+#include "ui/controllers/api/apiConfigsController.h"
 #include "ui/controllers/api/apiSettingsController.h"
 #include "ui/models/containers_model.h"
 #include "ui/models/languageModel.h"
@@ -139,6 +139,7 @@ private:
     QScopedPointer<AppSplitTunnelingController> m_appSplitTunnelingController;
 
     QScopedPointer<ApiSettingsController> m_apiSettingsController;
+    QScopedPointer<ApiConfigsController> m_apiConfigsController;
 
     QNetworkAccessManager *m_nam;
 

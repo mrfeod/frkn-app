@@ -37,7 +37,7 @@ PageType {
             Layout.rightMargin: 16
             Layout.leftMargin: 16
 
-            headerText: "Support"
+            headerText: qsTr("Support")
             descriptionText: qsTr("Our technical support specialists are ready to help you at any time")
         }
 

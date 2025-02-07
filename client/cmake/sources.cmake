@@ -23,7 +23,6 @@ set(HEADERS ${HEADERS}
     ${CLIENT_ROOT_DIR}/core/networkUtilities.h
     ${CLIENT_ROOT_DIR}/core/serialization/serialization.h
     ${CLIENT_ROOT_DIR}/core/serialization/transfer.h
-    ${CLIENT_ROOT_DIR}/core/enums/apiEnums.h
     ${CLIENT_ROOT_DIR}/../common/logger/logger.h
     ${CLIENT_ROOT_DIR}/utils/qmlUtils.h
     ${CLIENT_ROOT_DIR}/core/api/apiUtils.h

@@ -92,6 +92,10 @@ PageType {
                 descriptionText: ApiServicesModel.getSelectedServiceData("serviceDescription")
 
                 actionButtonFunction: function() {
+                    PageController.showBusyIndicator(true)
+                    ApiSettingsController.getAccountInfo()
+                    PageController.showBusyIndicator(false)
+
                     PageController.goToPage(PageEnum.PageSettingsApiServerInfo)
                 }
             }

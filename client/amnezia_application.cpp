@@ -2,6 +2,8 @@
 
 #include <QClipboard>
 #include <QFontDatabase>
+#include <QLocalServer>
+#include <QLocalSocket>
 #include <QMimeData>
 #include <QQuickItem>
 #include <QQuickStyle>
@@ -10,8 +12,6 @@
 #include <QTextDocument>
 #include <QTimer>
 #include <QTranslator>
-#include <QLocalSocket>
-#include <QLocalServer>
 
 #include "logger.h"
 #include "ui/models/installedAppsModel.h"
@@ -282,16 +282,17 @@ bool AmneziaApplication::parseCommands()
 }
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-void AmneziaApplication::startLocalServer() {
+void AmneziaApplication::startLocalServer()
+{
     const QString serverName("AmneziaVPNInstance");
     QLocalServer::removeServer(serverName);
 
-    QLocalServer* server = new QLocalServer(this);
+    QLocalServer *server = new QLocalServer(this);
     server->listen(serverName);
 
     QObject::connect(server, &QLocalServer::newConnection, this, [server, this]() {
         if (server) {
-            QLocalSocket* clientConnection = server->nextPendingConnection();
+            QLocalSocket *clientConnection = server->nextPendingConnection();
             clientConnection->deleteLater();
         }
         emit m_pageController->raiseMainWindow();
@@ -467,6 +468,9 @@ void AmneziaApplication::initControllers()
     m_systemController.reset(new SystemController(m_settings));
     m_engine->rootContext()->setContextProperty("SystemController", m_systemController.get());
 
-    m_apiSettingsController.reset(new ApiSettingsController(m_serversModel, m_apiAccountInfoModel, m_settings));
+    m_apiSettingsController.reset(new ApiSettingsController(m_serversModel, m_apiAccountInfoModel, m_apiCountryModel, m_settings));
     m_engine->rootContext()->setContextProperty("ApiSettingsController", m_apiSettingsController.get());
+
+    m_apiConfigsController.reset(new ApiConfigsController(m_serversModel, m_settings));
+    m_engine->rootContext()->setContextProperty("ApiConfigsController", m_apiConfigsController.get());
 }

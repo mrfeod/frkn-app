@@ -105,7 +105,7 @@ PageType {
                 actionButtonImage: "qrc:/images/controls/edit-3.svg"
 
                 headerText: root.processedServer.name
-                descriptionText: ApiServicesModel.getSelectedServiceData("serviceDescription")
+                descriptionText: ApiAccountInfoModel.data("serviceDescription")
 
                 actionButtonFunction: function() {
                     serverNameEditDrawer.openTriggered()
@@ -145,6 +145,8 @@ PageType {
             spacing: 0
 
             LabelWithButtonType {
+                id: vpnKey
+
                 Layout.fillWidth: true
                 Layout.topMargin: 32
 
@@ -157,17 +159,22 @@ PageType {
                 }
             }
 
-            DividerType {}
+            DividerType {
+                visible: false
+            }
 
             LabelWithButtonType {
                 Layout.fillWidth: true
+                Layout.topMargin: vpnKey.visible ? 0 : 32
 
                 text: qsTr("Configuration files")
 
-                descriptionText: qsTr("To connect the router")
+                descriptionText: qsTr("To connect a router or AmneziaWG application")
                 rightImageSource: "qrc:/images/controls/chevron-right.svg"
 
                 clickedFunction: function() {
+                    ApiSettingsController.updateApiCountryModel()
+                    PageController.goToPage(PageEnum.PageSettingsApiNativeConfigs)
                 }
             }
 

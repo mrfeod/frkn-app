@@ -3,9 +3,15 @@
 
 #include <QObject>
 
-namespace ApiUtils
+#include "apiDefs.h"
+
+namespace apiUtils
 {
+    bool isServerFromApi(const QJsonObject &serverConfigObject);
+
     bool isSubscriptionExpired(const QString &subscriptionEndDate);
+
+    apiDefs::ConfigType getConfigType(const QJsonObject &serverConfigObject);
 }
 
 #endif // APIUTILS_H

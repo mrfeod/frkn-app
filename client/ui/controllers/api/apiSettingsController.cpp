@@ -19,9 +19,14 @@ namespace
 }
 
 ApiSettingsController::ApiSettingsController(const QSharedPointer<ServersModel> &serversModel,
-                                       const QSharedPointer<ApiAccountInfoModel> &apiAccountInfoModel, const std::shared_ptr<Settings> &settings,
-                                       QObject *parent)
-    : QObject(parent), m_serversModel(serversModel), m_apiAccountInfoModel(apiAccountInfoModel), m_settings(settings)
+                                             const QSharedPointer<ApiAccountInfoModel> &apiAccountInfoModel,
+                                             const QSharedPointer<ApiCountryModel> &apiCountryModel,
+                                             const std::shared_ptr<Settings> &settings, QObject *parent)
+    : QObject(parent),
+      m_serversModel(serversModel),
+      m_apiAccountInfoModel(apiAccountInfoModel),
+      m_apiCountryModel(apiCountryModel),
+      m_settings(settings)
 {
 }
 
@@ -54,4 +59,9 @@ bool ApiSettingsController::getAccountInfo()
     m_apiAccountInfoModel->updateModel(accountInfo, serverConfig);
 
     return true;
+}
+
+void ApiSettingsController::updateApiCountryModel()
+{
+    m_apiCountryModel->updateModel(m_apiAccountInfoModel->getAvailableCountries(), "");
 }

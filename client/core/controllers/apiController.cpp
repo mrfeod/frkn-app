@@ -7,7 +7,7 @@
 
 #include "amnezia_application.h"
 #include "configurators/wireguard_configurator.h"
-#include "core/enums/apiEnums.h"
+#include "core/api/apiDefs.h"
 #include "gatewayController.h"
 #include "version.h"
 
@@ -106,7 +106,7 @@ void ApiController::fillServerConfig(const QString &protocol, const ApiControlle
     serverConfig[config_key::containers] = newServerConfig.value(config_key::containers);
     serverConfig[config_key::hostName] = newServerConfig.value(config_key::hostName);
 
-    if (newServerConfig.value(config_key::configVersion).toInt() == ApiConfigSources::AmneziaGateway) {
+    if (newServerConfig.value(config_key::configVersion).toInt() == apiDefs::ConfigSource::AmneziaGateway) {
         serverConfig[config_key::configVersion] = newServerConfig.value(config_key::configVersion);
         serverConfig[config_key::description] = newServerConfig.value(config_key::description);
         serverConfig[config_key::name] = newServerConfig.value(config_key::name);
@@ -119,7 +119,7 @@ void ApiController::fillServerConfig(const QString &protocol, const ApiControlle
     map.insert(newServerConfig.value(configKey::apiConfig).toObject().toVariantMap());
     auto apiConfig = QJsonObject::fromVariantMap(map);
 
-    if (newServerConfig.value(config_key::configVersion).toInt() == ApiConfigSources::AmneziaGateway) {
+    if (newServerConfig.value(config_key::configVersion).toInt() == apiDefs::ConfigSource::AmneziaGateway) {
         apiConfig.insert(configKey::serviceInfo, QJsonDocument::fromJson(apiResponseBody).object().value(configKey::serviceInfo).toObject());
     }
 
@@ -274,23 +274,4 @@ ErrorCode ApiController::getConfigForService(const QString &installationUuid, co
     return errorCode;
 }
 
-ErrorCode ApiController::getNativeConfig(const QString &userCountryCode, const QString &serviceType, const QString &protocol,
-                                         const QString &serverCountryCode, const QJsonObject &authData, QString &nativeConfig)
-{
-    GatewayController gatewayController(m_gatewayEndpoint, m_isDevEnvironment, requestTimeoutMsecs);
 
-    ApiPayloadData apiPayloadData = generateApiPayloadData(protocol);
-
-    QJsonObject apiPayload = fillApiPayload(protocol, apiPayloadData);
-    apiPayload[configKey::userCountryCode] = userCountryCode;
-    apiPayload[configKey::serverCountryCode] = serverCountryCode;
-    apiPayload[configKey::serviceType] = serviceType;
-    apiPayload[configKey::authData] = authData;
-
-    QByteArray responseBody;
-    ErrorCode errorCode = gatewayController.post(QString("%1v1/country_config"), apiPayload, responseBody);
-
-    nativeConfig = responseBody;
-
-    return errorCode;
-}
