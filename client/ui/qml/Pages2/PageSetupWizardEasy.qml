@@ -65,7 +65,7 @@ PageType {
                 implicitWidth: parent.width
                 headerTextMaximumLineCount: 10
 
-                headerText: qsTr("What is the level of internet control in your region?")
+                headerText: qsTr("Choose Installation Type")
             }
 
             ButtonGroup {
@@ -139,7 +139,8 @@ PageType {
             CardType {
                 implicitWidth: parent.width
 
-                headerText: qsTr("Choose a VPN protocol")
+                headerText: qsTr("Manual")
+                bodyText: qsTr("Choose a VPN protocol")
 
                 ButtonGroup.group: buttonGroup
 
