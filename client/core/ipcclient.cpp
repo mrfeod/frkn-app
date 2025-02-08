@@ -47,7 +47,9 @@ bool IpcClient::init(IpcClient *instance)
         Instance()->m_ClientNode.addClientSideConnection(Instance()->m_localSocket.data());
 
         Instance()->m_ipcClient.reset(Instance()->m_ClientNode.acquire<IpcInterfaceReplica>());
+#ifdef Q_OS_WIN
         std::this_thread::sleep_for(std::chrono::seconds(2)); //< wait until client is ready
+#endif
 
         if (!Instance()->m_ipcClient) {
             qFatal() << "IpcClient is not ready!";
@@ -60,8 +62,11 @@ bool IpcClient::init(IpcClient *instance)
         }
 
         Instance()->m_Tun2SocksClient.reset(Instance()->m_ClientNode.acquire<IpcProcessTun2SocksReplica>());
+
+#ifdef Q_OS_WIN
         std::this_thread::sleep_for(std::chrono::seconds(5)); //< wait until client is ready
-        
+#endif
+
         if (!Instance()->m_Tun2SocksClient) {
             qFatal() << "IpcClient::m_Tun2SocksClient is not ready!";
         }
