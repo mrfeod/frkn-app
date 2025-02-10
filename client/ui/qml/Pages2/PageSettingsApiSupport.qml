@@ -44,12 +44,14 @@ PageType {
         LabelWithButtonType {
             Layout.fillWidth: true
 
+            readonly property string telegramBotLink: ApiAccountInfoModel.getTelegramBotLink()
+
             text: qsTr("Telegram")
-            descriptionText: qsTr("@amnezia_premium_support_bot")
+            descriptionText: "@" + telegramBotLink
             rightImageSource: "qrc:/images/controls/external-link.svg"
 
             clickedFunction: function() {
-                Qt.openUrlExternally(qsTr("https://t.me/amnezia_premium_support_bot"))
+                Qt.openUrlExternally("https://t.me/" + telegramBotLink)
             }
         }
 

@@ -89,12 +89,15 @@ PageType {
                 actionButtonImage: "qrc:/images/controls/settings.svg"
 
                 headerText: root.processedServer.name
-                descriptionText: ApiServicesModel.getSelectedServiceData("serviceDescription")
+                descriptionText: qsTr("Locations for connection")
 
                 actionButtonFunction: function() {
                     PageController.showBusyIndicator(true)
-                    ApiSettingsController.getAccountInfo()
+                    let result = ApiSettingsController.getAccountInfo()
                     PageController.showBusyIndicator(false)
+                    if (!result) {
+                        return
+                    }
 
                     PageController.goToPage(PageEnum.PageSettingsApiServerInfo)
                 }

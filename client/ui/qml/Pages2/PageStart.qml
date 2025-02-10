@@ -224,6 +224,14 @@ PageType {
         }
     }
 
+    Connections {
+        target: ApiSettingsController
+
+        function onErrorOccurred(error) {
+            PageController.showErrorMessage(error)
+        }
+    }
+
     StackViewType {
         id: tabBarStackView
         objectName: "tabBarStackView"

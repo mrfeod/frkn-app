@@ -48,8 +48,13 @@ ApiConfigsController::ApiConfigsController(const QSharedPointer<ServersModel> &s
 {
 }
 
-void ApiConfigsController::exportNativeConfig(const QString &serverCountryCode, const QString &fileName)
+bool ApiConfigsController::exportNativeConfig(const QString &serverCountryCode, const QString &fileName)
 {
+    if (fileName.isEmpty()) {
+        emit errorOccurred(ErrorCode::PermissionsError);
+        return false;
+    }
+
     GatewayController gatewayController(m_settings->getGatewayEndpoint(), m_settings->isDevGatewayEnv(), apiDefs::requestTimeoutMsecs);
 
     auto serverConfigObject = m_serversModel->getServerConfig(m_serversModel->getProcessedServerIndex());
@@ -67,14 +72,16 @@ void ApiConfigsController::exportNativeConfig(const QString &serverCountryCode, 
 
     QByteArray responseBody;
     ErrorCode errorCode = gatewayController.post(QString("%1v1/native_config"), apiPayload, responseBody);
-    // // if (errorCode != ErrorCode::NoError) {
-
-    // // }
+    if (errorCode != ErrorCode::NoError) {
+        emit errorOccurred(errorCode);
+        return false;
+    }
 
     QJsonObject jsonConfig = QJsonDocument::fromJson(responseBody).object();
     QString nativeConfig = jsonConfig.value(configKey::config).toString();
 
     SystemController::saveFile(fileName, nativeConfig);
+    return true;
 }
 
 ApiConfigsController::ApiPayloadData ApiConfigsController::generateApiPayloadData(const QString &protocol)

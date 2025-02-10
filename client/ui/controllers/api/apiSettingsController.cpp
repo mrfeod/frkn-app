@@ -1,5 +1,6 @@
 #include "apiSettingsController.h"
 
+#include "core/api/apiUtils.h"
 #include "core/controllers/gatewayController.h"
 
 namespace
@@ -49,10 +50,13 @@ bool ApiSettingsController::getAccountInfo()
     apiPayload[configKey::authData] = authData;
 
     QByteArray responseBody;
-    ErrorCode errorCode = gatewayController.post(QString("%1v1/account_info"), apiPayload, responseBody);
-    if (errorCode != ErrorCode::NoError) {
-        // emit errorOccured(errorCode);
-        return false;
+
+    if (apiUtils::getConfigType(serverConfig) == apiDefs::ConfigType::AmneziaPremiumV2) {
+        ErrorCode errorCode = gatewayController.post(QString("%1v1/account_info"), apiPayload, responseBody);
+        if (errorCode != ErrorCode::NoError) {
+            emit errorOccurred(errorCode);
+            return false;
+        }
     }
 
     QJsonObject accountInfo = QJsonDocument::fromJson(responseBody).object();

@@ -141,8 +141,12 @@ PageType {
         }
 
         footer: ColumnLayout {
+            id: footer
+
             width: listView.width
             spacing: 0
+
+            readonly property bool isVisibleForAmneziaFree: ApiAccountInfoModel.data("isComponentVisible")
 
             LabelWithButtonType {
                 id: vpnKey
@@ -150,7 +154,7 @@ PageType {
                 Layout.fillWidth: true
                 Layout.topMargin: 32
 
-                visible: false
+                visible: footer.isVisibleForAmneziaFree
 
                 text: qsTr("Subscription key")
                 rightImageSource: "qrc:/images/controls/chevron-right.svg"
@@ -160,12 +164,13 @@ PageType {
             }
 
             DividerType {
-                visible: false
+                visible: footer.isVisibleForAmneziaFree
             }
 
             LabelWithButtonType {
                 Layout.fillWidth: true
-                Layout.topMargin: vpnKey.visible ? 0 : 32
+
+                visible: footer.isVisibleForAmneziaFree
 
                 text: qsTr("Configuration files")
 
@@ -178,10 +183,13 @@ PageType {
                 }
             }
 
-            DividerType {}
+            DividerType {
+                visible: footer.isVisibleForAmneziaFree
+            }
 
             LabelWithButtonType {
                 Layout.fillWidth: true
+                Layout.topMargin: footer.isVisibleForAmneziaFree ? 0 : 32
 
                 text: qsTr("Support")
                 rightImageSource: "qrc:/images/controls/chevron-right.svg"

@@ -16,7 +16,8 @@ public:
         SubscriptionStatusRole = Qt::UserRole + 1,
         ConnectedDevicesRole,
         ServiceDescriptionRole,
-        EndDateRole
+        EndDateRole,
+        IsComponentVisibleRole
     };
 
     explicit ApiAccountInfoModel(QObject *parent = nullptr);
@@ -30,6 +31,7 @@ public slots:
     QVariant data(const QString &roleString);
 
     QJsonArray getAvailableCountries();
+    QString getTelegramBotLink();
 
 protected:
     QHash<int, QByteArray> roleNames() const override;

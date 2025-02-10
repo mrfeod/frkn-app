@@ -213,21 +213,6 @@ void ApiController::updateServerConfigFromApi(const QString &installationUuid, c
     }
 }
 
-ErrorCode ApiController::getAccountInfo(const QString &userCountryCode, const QString &serviceType, const QJsonObject &authData,
-                                        QByteArray &responseBody)
-{
-    GatewayController gatewayController(m_gatewayEndpoint, m_isDevEnvironment, requestTimeoutMsecs);
-
-    QJsonObject apiPayload;
-    apiPayload[configKey::userCountryCode] = userCountryCode;
-    apiPayload[configKey::serviceType] = serviceType;
-    apiPayload[configKey::authData] = authData;
-
-    ErrorCode errorCode = gatewayController.post(QString("%1v1/account_info"), apiPayload, responseBody);
-
-    return errorCode;
-}
-
 ErrorCode ApiController::getServicesList(QByteArray &responseBody)
 {
     GatewayController gatewayController(m_gatewayEndpoint, m_isDevEnvironment, requestTimeoutMsecs);

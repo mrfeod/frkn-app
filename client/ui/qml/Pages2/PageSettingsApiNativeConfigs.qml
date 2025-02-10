@@ -75,8 +75,12 @@ PageType {
                     }
                     if (fileName !== "") {
                         PageController.showBusyIndicator(true)
-                        ApiConfigsController.exportNativeConfig(countryCode, fileName)
+                        let result = ApiConfigsController.exportNativeConfig(countryCode, fileName)
                         PageController.showBusyIndicator(false)
+
+                        if (result) {
+                            PageController.showNotificationMessage(qsTr("Config file saved"))
+                        }
                     }
                 }
             }

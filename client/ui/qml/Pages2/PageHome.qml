@@ -303,8 +303,11 @@ PageType {
                                     PageController.goToPage(PageEnum.PageSettingsApiAvailableCountries)
                                 } else {
                                     PageController.showBusyIndicator(true)
-                                    ApiSettingsController.getAccountInfo()
+                                    let result = ApiSettingsController.getAccountInfo()
                                     PageController.showBusyIndicator(false)
+                                    if (!result) {
+                                        return
+                                    }
 
                                     PageController.goToPage(PageEnum.PageSettingsApiServerInfo)
                                 }

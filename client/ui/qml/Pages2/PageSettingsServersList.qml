@@ -96,8 +96,11 @@ PageType {
 
                         if (ServersModel.getProcessedServerData("isServerFromGatewayApi")) {
                             PageController.showBusyIndicator(true)
-                            ApiSettingsController.getAccountInfo()
+                            let result = ApiSettingsController.getAccountInfo()
                             PageController.showBusyIndicator(false)
+                            if (!result) {
+                                return
+                            }
 
                             PageController.goToPage(PageEnum.PageSettingsApiServerInfo)
                         } else {

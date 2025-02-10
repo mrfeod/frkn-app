@@ -11,10 +11,13 @@ class ApiConfigsController : public QObject
     Q_OBJECT
 public:
     ApiConfigsController(const QSharedPointer<ServersModel> &serversModel, const std::shared_ptr<Settings> &settings,
-                        QObject *parent = nullptr);
+                         QObject *parent = nullptr);
 
 public slots:
-    void exportNativeConfig(const QString &serverCountryCode, const QString &fileName);
+    bool exportNativeConfig(const QString &serverCountryCode, const QString &fileName);
+
+signals:
+    void errorOccurred(ErrorCode errorCode);
 
 private:
     struct ApiPayloadData

@@ -20,6 +20,9 @@ public slots:
     bool getAccountInfo();
     void updateApiCountryModel();
 
+signals:
+    void errorOccurred(ErrorCode errorCode);
+
 private:
     QSharedPointer<ServersModel> m_serversModel;
     QSharedPointer<ApiAccountInfoModel> m_apiAccountInfoModel;

@@ -12,9 +12,6 @@ namespace
     namespace configKey
     {
         constexpr char availableCountries[] = "available_countries";
-        // constexpr char serverCountryCode[] = "server_country_code";
-        // constexpr char serverCountryName[] = "server_country_name";
-        // constexpr char lastUpdated[] = "last_updated";
         constexpr char activeDeviceCount[] = "active_device_count";
         constexpr char maxDeviceCount[] = "max_device_count";
         constexpr char subscriptionEndDate[] = "subscription_end_date";
@@ -38,12 +35,23 @@ QVariant ApiAccountInfoModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case SubscriptionStatusRole: {
+        if (m_accountInfoData.configType == apiDefs::ConfigType::AmneziaFreeV3) {
+            return tr("Active");
+        }
+
         return apiUtils::isSubscriptionExpired(m_accountInfoData.subscriptionEndDate) ? tr("Inactive") : tr("Active");
     }
     case EndDateRole: {
+        if (m_accountInfoData.configType == apiDefs::ConfigType::AmneziaFreeV3) {
+            return "";
+        }
+
         return QDateTime::fromString(m_accountInfoData.subscriptionEndDate, Qt::ISODate).toLocalTime().toString("d MMM yyyy");
     }
     case ConnectedDevicesRole: {
+        if (m_accountInfoData.configType == apiDefs::ConfigType::AmneziaFreeV3) {
+            return "";
+        }
         return tr("%1 out of %2").arg(m_accountInfoData.activeDeviceCount).arg(m_accountInfoData.maxDeviceCount);
     }
     case ServiceDescriptionRole: {
@@ -54,6 +62,9 @@ QVariant ApiAccountInfoModel::data(const QModelIndex &index, int role) const
             return tr("Free unlimited access to a basic set of websites such as Facebook, Instagram, Twitter (X), Discord, Telegram and "
                       "more. YouTube is not included in the free plan.");
         }
+    }
+    case IsComponentVisibleRole: {
+        return m_accountInfoData.configType == apiDefs::ConfigType::AmneziaPremiumV2;
     }
     }
 
@@ -67,15 +78,6 @@ void ApiAccountInfoModel::updateModel(const QJsonObject &accountInfoObject, cons
     AccountInfoData accountInfoData;
 
     m_availableCountries = accountInfoObject.value(configKey::availableCountries).toArray();
-    // for (const auto &country : availableCountries) {
-    //     auto countryObject = country.toObject();
-    //     CountryInfo countryInfo;
-    //     countryInfo.serverCountryCode = countryObject.value(configKey::serverCountryCode).toString();
-    //     countryInfo.serverCountryName = countryObject.value(configKey::serverCountryName).toString();
-    //     countryInfo.lastUpdated = countryObject.value(configKey::lastUpdated).toString();
-
-    //     accountInfoData.AvailableCountries.push_back(countryInfo);
-    // }
 
     accountInfoData.activeDeviceCount = accountInfoObject.value(configKey::activeDeviceCount).toInt();
     accountInfoData.maxDeviceCount = accountInfoObject.value(configKey::maxDeviceCount).toInt();
@@ -106,6 +108,16 @@ QJsonArray ApiAccountInfoModel::getAvailableCountries()
     return m_availableCountries;
 }
 
+QString ApiAccountInfoModel::getTelegramBotLink()
+{
+    if (m_accountInfoData.configType == apiDefs::ConfigType::AmneziaFreeV3) {
+        return tr("amnezia_free_support_bot");
+    } else if (m_accountInfoData.configType == apiDefs::ConfigType::AmneziaPremiumV2) {
+        return tr("amnezia_premium_support_bot");
+    }
+    return "";
+}
+
 QHash<int, QByteArray> ApiAccountInfoModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
@@ -113,6 +125,7 @@ QHash<int, QByteArray> ApiAccountInfoModel::roleNames() const
     roles[EndDateRole] = "endDate";
     roles[ConnectedDevicesRole] = "connectedDevices";
     roles[ServiceDescriptionRole] = "serviceDescription";
+    roles[IsComponentVisibleRole] = "isComponentVisible";
 
     return roles;
 }
