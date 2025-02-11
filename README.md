@@ -16,7 +16,7 @@
 ### [Website](https://amnezia.org) | [Alt website link](https://storage.googleapis.com/amnezia/amnezia.org) | [Documentation](https://docs.amnezia.org) | [Troubleshooting](https://docs.amnezia.org/troubleshooting)
 
 > [!TIP]
-> If the [Amnezia website](https://amnezia.org) is blocked in your region, you can use an [Alternative website link]([https://storage.googleapis.com/kldscp/amnezia.org](https://storage.googleapis.com/amnezia/amnezia.org ).
+> If the [Amnezia website](https://amnezia.org) is blocked in your region, you can use an [Alternative website link](https://storage.googleapis.com/amnezia/amnezia.org ).
 
 <a href="https://amnezia.org/downloads"><img src="https://github.com/amnezia-vpn/amnezia-client/blob/dev/metadata/img-readme/download-website.svg" width="150" style="max-width: 100%; margin-right: 10px"></a>
 <a href="https://storage.googleapis.com/amnezia/q9p19109"><img src="https://github.com/amnezia-vpn/amnezia-client/blob/dev/metadata/img-readme/download-alt.svg" width="150" style="max-width: 100%;"></a>
