@@ -13,13 +13,13 @@
 
 [![Image](https://github.com/amnezia-vpn/amnezia-client/blob/dev/metadata/img-readme/uipic4.png)](https://amnezia.org)
 
-### [Website](https://amnezia.org) | [Alt website link](https://storage.googleapis.com/kldscp/amnezia.org) | [Documentation](https://docs.amnezia.org) | [Troubleshooting](https://docs.amnezia.org/troubleshooting)
+### [Website](https://amnezia.org) | [Alt website link](https://storage.googleapis.com/amnezia/amnezia.org) | [Documentation](https://docs.amnezia.org) | [Troubleshooting](https://docs.amnezia.org/troubleshooting)
 
 > [!TIP]
-> If the [Amnezia website](https://amnezia.org) is blocked in your region, you can use an [Alternative website link](https://storage.googleapis.com/kldscp/amnezia.org).
+> If the [Amnezia website](https://amnezia.org) is blocked in your region, you can use an [Alternative website link]([https://storage.googleapis.com/kldscp/amnezia.org](https://storage.googleapis.com/amnezia/amnezia.org ).
 
 <a href="https://amnezia.org/downloads"><img src="https://github.com/amnezia-vpn/amnezia-client/blob/dev/metadata/img-readme/download-website.svg" width="150" style="max-width: 100%; margin-right: 10px"></a>
-<a href="https://storage.googleapis.com/kldscp/amnezia.org/downloads"><img src="https://github.com/amnezia-vpn/amnezia-client/blob/dev/metadata/img-readme/download-alt.svg" width="150" style="max-width: 100%;"></a>
+<a href="https://storage.googleapis.com/amnezia/q9p19109"><img src="https://github.com/amnezia-vpn/amnezia-client/blob/dev/metadata/img-readme/download-alt.svg" width="150" style="max-width: 100%;"></a>
 
 [All releases](https://github.com/amnezia-vpn/amnezia-client/releases)
 
