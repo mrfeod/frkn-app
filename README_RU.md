@@ -10,12 +10,12 @@
 
 [![Image](https://github.com/amnezia-vpn/amnezia-client/blob/dev/metadata/img-readme/uipic4.png)](https://amnezia.org)
 
-### [Сайт](https://amnezia.org) | [Зеркало на сайт](https://storage.googleapis.com/kldscp/amnezia.org) | [Документация](https://docs.amnezia.org) | [Решение проблем](https://docs.amnezia.org/troubleshooting)
+### [Сайт](https://amnezia.org) | [Зеркало на сайт](https://storage.googleapis.com/amnezia/amnezia.org) | [Документация](https://docs.amnezia.org) | [Решение проблем](https://docs.amnezia.org/troubleshooting)
 
 > [!TIP]
-> Если [сайт Amnezia](https://amnezia.org) заблокирован в вашем регионе, вы можете воспользоваться [ссылкой на зеркало](https://storage.googleapis.com/kldscp/amnezia.org).
+> Если [сайт Amnezia](https://amnezia.org) заблокирован в вашем регионе, вы можете воспользоваться [ссылкой на зеркало](https://storage.googleapis.com/amnezia/amnezia.org).
 
-<a href="https://storage.googleapis.com/kldscp/amnezia.org/downloads"><img src="https://github.com/amnezia-vpn/amnezia-client/blob/dev/metadata/img-readme/download-website-ru.svg" width="150" style="max-width: 100%; margin-right: 10px"></a>
+<a href="https://storage.googleapis.com/amnezia/q9p19109"><img src="https://github.com/amnezia-vpn/amnezia-client/blob/dev/metadata/img-readme/download-website-ru.svg" width="150" style="max-width: 100%; margin-right: 10px"></a>
 
 
 [Все релизы](https://github.com/amnezia-vpn/amnezia-client/releases)
