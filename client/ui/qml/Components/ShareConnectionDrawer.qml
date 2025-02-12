@@ -22,7 +22,11 @@ DrawerType2 {
 
     property string headerText
     property string configContentHeaderText
-    property string contentVisible
+    property string shareButtonText: qsTr("Share")
+    property string copyButtonText: qsTr("Copy")
+    property bool showSettingsButtonVisible: true
+
+    property bool contentVisible
 
     property string configExtension: ".vpn"
     property string configCaption: qsTr("Save AmneziaVPN config")
@@ -80,7 +84,7 @@ DrawerType2 {
                     Layout.leftMargin: 16
                     Layout.rightMargin: 16
 
-                    text: qsTr("Share")
+                    text: root.shareButtonText
                     leftImageSource: "qrc:/images/controls/share-2.svg"
 
                     clickedFunc: function() {
@@ -116,7 +120,7 @@ DrawerType2 {
                     textColor: AmneziaStyle.color.paleGray
                     borderWidth: 1
 
-                    text: qsTr("Copy")
+                    text: root.copyButtonText
                     leftImageSource: "qrc:/images/controls/copy.svg"
 
                     Keys.onReturnPressed: { copyConfigTextButton.clicked() }
@@ -152,6 +156,8 @@ DrawerType2 {
                     Layout.topMargin: 24
                     Layout.leftMargin: 16
                     Layout.rightMargin: 16
+
+                    visible: root.showSettingsButtonVisible
 
                     defaultColor: AmneziaStyle.color.transparent
                     hoveredColor: AmneziaStyle.color.translucentWhite

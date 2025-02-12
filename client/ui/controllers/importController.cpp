@@ -7,6 +7,8 @@
 #include <QStandardPaths>
 #include <QUrlQuery>
 
+#include "core/api/apiDefs.h"
+#include "core/api/apiUtils.h"
 #include "core/errorstrings.h"
 #include "core/serialization/serialization.h"
 #include "systemController.h"
@@ -45,7 +47,8 @@ namespace
 
         if (config.contains(backupPattern)) {
             return ConfigTypes::Backup;
-        } else if (config.contains(amneziaConfigPattern) || config.contains(amneziaFreeConfigPattern) || config.contains(amneziaPremiumConfigPattern)
+        } else if (config.contains(amneziaConfigPattern) || config.contains(amneziaFreeConfigPattern)
+                   || config.contains(amneziaPremiumConfigPattern)
                    || (config.contains(amneziaConfigPatternHostName) && config.contains(amneziaConfigPatternUserName)
                        && config.contains(amneziaConfigPatternPassword))) {
             return ConfigTypes::Amnezia;
@@ -149,8 +152,8 @@ bool ImportController::extractConfigFromData(QString data)
 
     m_configType = checkConfigFormat(config);
     if (m_configType == ConfigTypes::Invalid) {
-        data.replace("vpn://", "");
-        QByteArray ba = QByteArray::fromBase64(data.toUtf8(), QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals);
+        config.replace("vpn://", "");
+        QByteArray ba = QByteArray::fromBase64(config.toUtf8(), QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals);
         QByteArray ba_uncompressed = qUncompress(ba);
         if (!ba_uncompressed.isEmpty()) {
             ba = ba_uncompressed;
@@ -180,6 +183,13 @@ bool ImportController::extractConfigFromData(QString data)
     }
     case ConfigTypes::Amnezia: {
         m_config = QJsonDocument::fromJson(config.toUtf8()).object();
+
+        if (apiUtils::isServerFromApi(m_config)) {
+            auto apiConfig = m_config.value(apiDefs::key::apiConfig).toObject();
+            apiConfig[apiDefs::key::vpnKey] = data;
+            m_config[apiDefs::key::apiConfig] = apiConfig;
+        }
+
         processAmneziaConfig(m_config);
         if (!m_config.empty()) {
             checkForMaliciousStrings(m_config);
@@ -680,7 +690,8 @@ void ImportController::processAmneziaConfig(QJsonObject &config)
             }
 
             QJsonObject jsonConfig = QJsonDocument::fromJson(protocolConfig.toUtf8()).object();
-            jsonConfig[config_key::mtu] = dockerContainer == DockerContainer::Awg ? protocols::awg::defaultMtu : protocols::wireguard::defaultMtu;
+            jsonConfig[config_key::mtu] =
+                    dockerContainer == DockerContainer::Awg ? protocols::awg::defaultMtu : protocols::wireguard::defaultMtu;
 
             containerConfig[config_key::last_config] = QString(QJsonDocument(jsonConfig).toJson());
 

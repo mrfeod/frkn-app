@@ -160,6 +160,20 @@ PageType {
                 rightImageSource: "qrc:/images/controls/chevron-right.svg"
 
                 clickedFunction: function() {
+                    shareConnectionDrawer.headerText = qsTr("Amnezia Premium subscription key")
+
+                    shareConnectionDrawer.openTriggered()
+                    shareConnectionDrawer.contentVisible = false
+                    shareConnectionDrawer.showSettingsButtonVisible = false;
+                    shareConnectionDrawer.shareButtonText = qsTr("Save VPN key to file")
+                    shareConnectionDrawer.copyButtonText = qsTr("Copy VPN key")
+
+
+                    PageController.showBusyIndicator(true)
+
+                    ApiConfigsController.prepareVpnKeyExport()
+
+                    PageController.showBusyIndicator(false)
                 }
             }
 
@@ -291,5 +305,11 @@ PageType {
                 }
             }
         }
+    }
+
+    ShareConnectionDrawer {
+        id: shareConnectionDrawer
+
+        anchors.fill: parent
     }
 }

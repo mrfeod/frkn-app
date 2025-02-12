@@ -24,6 +24,8 @@ namespace apiDefs
 
         constexpr QLatin1String apiConfig("api_config");
         constexpr QLatin1String stackType("stack_type");
+
+        constexpr QLatin1String vpnKey("vpn_key");
     }
 
     const int requestTimeoutMsecs = 12 * 1000; // 12 secs

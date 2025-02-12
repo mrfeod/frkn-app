@@ -59,6 +59,7 @@ endif()
 qt_standard_project_setup()
 qt_add_executable(${PROJECT} MANUAL_FINALIZATION
     core/api/apiDefs.h
+    core/qrCodeUtils.h core/qrCodeUtils.cpp
 )
 
 if(WIN32 OR (APPLE AND NOT IOS) OR (LINUX AND NOT ANDROID))

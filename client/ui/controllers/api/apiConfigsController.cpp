@@ -1,10 +1,11 @@
-#include "ApiConfigsController.h"
+#include "apiConfigsController.h"
 
 #include "configurators/wireguard_configurator.h"
 #include "core/api/apiDefs.h"
 #include "core/controllers/gatewayController.h"
-#include "version.h"
+#include "core/qrCodeUtils.h"
 #include "ui/controllers/systemController.h"
+#include "version.h"
 
 namespace
 {
@@ -43,7 +44,7 @@ namespace
 }
 
 ApiConfigsController::ApiConfigsController(const QSharedPointer<ServersModel> &serversModel, const std::shared_ptr<Settings> &settings,
-                                         QObject *parent)
+                                           QObject *parent)
     : QObject(parent), m_serversModel(serversModel), m_settings(settings)
 {
 }
@@ -84,6 +85,19 @@ bool ApiConfigsController::exportNativeConfig(const QString &serverCountryCode, 
     return true;
 }
 
+void ApiConfigsController::prepareVpnKeyExport()
+{
+    auto serverConfigObject = m_serversModel->getServerConfig(m_serversModel->getProcessedServerIndex());
+    auto apiConfigObject = serverConfigObject.value(configKey::apiConfig).toObject();
+
+    auto vpnKey = apiConfigObject.value(apiDefs::key::vpnKey).toString();
+
+    auto qr = qrCodeUtuls::generateQrCode(vpnKey.toUtf8());
+    m_qrCodes << qrCodeUtuls::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
+
+    emit vpnKeyExportReady();
+}
+
 ApiConfigsController::ApiPayloadData ApiConfigsController::generateApiPayloadData(const QString &protocol)
 {
     ApiConfigsController::ApiPayloadData apiPayload;
@@ -110,4 +124,14 @@ QJsonObject ApiConfigsController::fillApiPayload(const QString &protocol, const 
     obj[configKey::appVersion] = QString(APP_VERSION);
 
     return obj;
+}
+
+QList<QString> ApiConfigsController::getQrCodes()
+{
+    return m_qrCodes;
+}
+
+int ApiConfigsController::getQrCodesCount()
+{
+    return m_qrCodes.size();
 }
