@@ -44,6 +44,7 @@ namespace amnezia
         InternalError = 101,
         NotImplementedError = 102,
         AmneziaServiceNotRunning = 103,
+        NotSupportedOnThisPlatform = 104,
 
         // Server errors
         ServerCheckFailed = 200,
@@ -94,6 +95,7 @@ namespace amnezia
         // import and install errors
         ImportInvalidConfigError = 900,
         ImportOpenConfigError = 901,
+        NoInstalledContainersError = 902,
 
         // Android errors
         AndroidError = 1000,

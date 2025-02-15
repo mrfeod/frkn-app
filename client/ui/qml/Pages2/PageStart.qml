@@ -132,29 +132,6 @@ PageType {
             PageController.showNotificationMessage(message)
         }
 
-        function onInstallServerFromApiFinished(message) {
-            PageController.showBusyIndicator(false)
-            if (!ConnectionController.isConnected) {
-                ServersModel.setDefaultServerIndex(ServersModel.getServersCount() - 1);
-                ServersModel.processedIndex = ServersModel.defaultIndex
-            }
-
-            PageController.goToPageHome()
-            PageController.showNotificationMessage(message)
-        }
-
-        function onChangeApiCountryFinished(message) {
-            PageController.showBusyIndicator(false)
-
-            PageController.goToPageHome()
-            PageController.showNotificationMessage(message)
-        }
-
-        function onReloadServerFromApiFinished(message) {
-            PageController.goToPageHome()
-            PageController.showNotificationMessage(message)
-        }
-
         function onRemoveProcessedServerFinished(finishedMessage) {
             if (!ServersModel.getServersCount()) {
                 PageController.goToPageHome()
@@ -163,6 +140,14 @@ PageType {
                 PageController.goToPage(PageEnum.PageSettingsServersList)
             }
             PageController.showNotificationMessage(finishedMessage)
+        }
+
+        function onNoInstalledContainers() {
+            PageController.setTriggeredByConnectButton(true)
+
+            ServersModel.processedIndex = ServersModel.getDefaultServerIndex()
+            InstallController.setShouldCreateServer(false)
+            PageController.goToPage(PageEnum.PageSetupWizardEasy)
         }
     }
 
@@ -174,14 +159,6 @@ PageType {
         function onReconnectWithUpdatedContainer(message) {
             PageController.showNotificationMessage(message)
             PageController.closePage()
-        }
-
-        function onNoInstalledContainers() {
-            PageController.setTriggeredByConnectButton(true)
-
-            ServersModel.processedIndex = ServersModel.getDefaultServerIndex()
-            InstallController.setShouldCreateServer(false)
-            PageController.goToPage(PageEnum.PageSetupWizardEasy)
         }
     }
 
@@ -229,6 +206,37 @@ PageType {
 
         function onErrorOccurred(error) {
             PageController.showErrorMessage(error)
+        }
+    }
+
+    Connections {
+        target: ApiConfigsController
+
+        function onErrorOccurred(error) {
+            PageController.showErrorMessage(error)
+        }
+
+        function onInstallServerFromApiFinished(message) {
+            PageController.showBusyIndicator(false)
+            if (!ConnectionController.isConnected) {
+                ServersModel.setDefaultServerIndex(ServersModel.getServersCount() - 1);
+                ServersModel.processedIndex = ServersModel.defaultIndex
+            }
+
+            PageController.goToPageHome()
+            PageController.showNotificationMessage(message)
+        }
+
+        function onChangeApiCountryFinished(message) {
+            PageController.showBusyIndicator(false)
+
+            PageController.goToPageHome()
+            PageController.showNotificationMessage(message)
+        }
+
+        function onReloadServerFromApiFinished(message) {
+            PageController.goToPageHome()
+            PageController.showNotificationMessage(message)
         }
     }
 

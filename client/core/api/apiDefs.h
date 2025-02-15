@@ -6,7 +6,7 @@
 namespace apiDefs
 {
     enum ConfigType {
-        AmneziaFreeV2 = 1,
+        AmneziaFreeV2 = 0,
         AmneziaFreeV3,
         AmneziaPremiumV1,
         AmneziaPremiumV2,

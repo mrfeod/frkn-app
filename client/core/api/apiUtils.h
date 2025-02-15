@@ -12,6 +12,7 @@ namespace apiUtils
     bool isSubscriptionExpired(const QString &subscriptionEndDate);
 
     apiDefs::ConfigType getConfigType(const QJsonObject &serverConfigObject);
+    apiDefs::ConfigSource getConfigSource(const QJsonObject &serverConfigObject);
 }
 
 #endif // APIUTILS_H

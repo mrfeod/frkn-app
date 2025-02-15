@@ -261,7 +261,7 @@ void ServersModel::setProcessedServerIndex(const int index)
     updateContainersModel();
     if (data(index, IsServerFromGatewayApiRole).toBool()) {
         if (data(index, IsCountrySelectionAvailableRole).toBool()) {
-            emit updateApiLanguageModel();
+            emit updateApiCountryModel();
         }
         emit updateApiServicesModel();
     }

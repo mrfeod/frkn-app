@@ -253,7 +253,7 @@ PageType {
                             PageController.showNotificationMessage(qsTr("Cannot reload API config during active connection"))
                         } else {
                             PageController.showBusyIndicator(true)
-                            InstallController.updateServiceFromApi(ServersModel.processedIndex, "", "", true)
+                            ApiConfigsController.updateServiceFromGateway(ServersModel.processedIndex, "", "", true)
                             PageController.showBusyIndicator(false)
                         }
                     }

@@ -44,3 +44,8 @@ apiDefs::ConfigType apiUtils::getConfigType(const QJsonObject &serverConfigObjec
     }
     };
 }
+
+apiDefs::ConfigSource apiUtils::getConfigSource(const QJsonObject &serverConfigObject)
+{
+    return static_cast<apiDefs::ConfigSource>(serverConfigObject.value(apiDefs::key::configVersion).toInt());
+}
