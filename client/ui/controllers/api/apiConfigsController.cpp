@@ -269,7 +269,7 @@ bool ApiConfigsController::updateServiceFromTelegram(const int serverIndex)
         connect(reply, &QNetworkReply::sslErrors, [this, &sslErrors](const QList<QSslError> &errors) { sslErrors = errors; });
         wait.exec();
 
-        auto errorCode = NetworkUtilities::checkNetworkReplyErrors(sslErrors, reply);
+        auto errorCode = apiUtils::checkNetworkReplyErrors(sslErrors, reply);
         if (errorCode != ErrorCode::NoError) {
             reply->deleteLater();
             emit errorOccurred(errorCode);

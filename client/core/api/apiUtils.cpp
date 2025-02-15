@@ -49,3 +49,32 @@ apiDefs::ConfigSource apiUtils::getConfigSource(const QJsonObject &serverConfigO
 {
     return static_cast<apiDefs::ConfigSource>(serverConfigObject.value(apiDefs::key::configVersion).toInt());
 }
+
+amnezia::ErrorCode apiUtils::checkNetworkReplyErrors(const QList<QSslError> &sslErrors, QNetworkReply *reply)
+{
+    const int httpStatusCodeConflict = 409;
+
+    if (!sslErrors.empty()) {
+        qDebug().noquote() << sslErrors;
+        return amnezia::ErrorCode::ApiConfigSslError;
+    } else if (reply->error() == QNetworkReply::NoError) {
+        return amnezia::ErrorCode::NoError;
+    } else if (reply->error() == QNetworkReply::NetworkError::OperationCanceledError
+               || reply->error() == QNetworkReply::NetworkError::TimeoutError) {
+        return amnezia::ErrorCode::ApiConfigTimeoutError;
+    } else {
+        QString err = reply->errorString();
+        int httpStatusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qDebug() << QString::fromUtf8(reply->readAll());
+        qDebug() << reply->error();
+        qDebug() << err;
+        qDebug() << httpStatusCode;
+        if (httpStatusCode == httpStatusCodeConflict) {
+            return amnezia::ErrorCode::ApiConfigLimitError;
+        }
+        return amnezia::ErrorCode::ApiConfigDownloadError;
+    }
+
+    qDebug() << "something went wrong";
+    return amnezia::ErrorCode::InternalError;
+}

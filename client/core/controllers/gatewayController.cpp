@@ -9,7 +9,7 @@
 #include "QRsa.h"
 
 #include "amnezia_application.h"
-#include "core/networkUtilities.h"
+#include "core/api/apiUtils.h"
 #include "utilities.h"
 
 namespace
@@ -75,7 +75,7 @@ ErrorCode GatewayController::get(const QString &endpoint, QByteArray &responseBo
         bypassProxy(endpoint, reply, requestFunction, replyProcessingFunction);
     }
 
-    auto errorCode = NetworkUtilities::checkNetworkReplyErrors(sslErrors, reply);
+    auto errorCode = apiUtils::checkNetworkReplyErrors(sslErrors, reply);
     reply->deleteLater();
 
     return errorCode;
@@ -165,7 +165,7 @@ ErrorCode GatewayController::post(const QString &endpoint, const QJsonObject api
         bypassProxy(endpoint, reply, requestFunction, replyProcessingFunction);
     }
 
-    auto errorCode = NetworkUtilities::checkNetworkReplyErrors(sslErrors, reply);
+    auto errorCode = apiUtils::checkNetworkReplyErrors(sslErrors, reply);
     reply->deleteLater();
     if (errorCode) {
         return errorCode;
