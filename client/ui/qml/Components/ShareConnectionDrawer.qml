@@ -26,8 +26,6 @@ DrawerType2 {
     property string copyButtonText: qsTr("Copy")
     property bool showSettingsButtonVisible: true
 
-    property bool contentVisible
-
     property string configExtension: ".vpn"
     property string configCaption: qsTr("Save AmneziaVPN config")
     property string configFileName: "amnezia_config"
@@ -74,8 +72,6 @@ DrawerType2 {
 
             header: ColumnLayout {
                 width: listView.width
-
-                visible: root.contentVisible
 
                 BasicButtonType {
                     id: shareButton
