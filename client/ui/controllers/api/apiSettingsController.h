@@ -4,7 +4,7 @@
 #include <QObject>
 
 #include "ui/models/api/apiAccountInfoModel.h"
-#include "ui/models/apiCountryModel.h"
+#include "ui/models/api/apiCountryModel.h"
 #include "ui/models/servers_model.h"
 
 class ApiSettingsController : public QObject

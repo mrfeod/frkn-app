@@ -24,7 +24,7 @@ public:
     Q_PROPERTY(int currentIndex READ getCurrentIndex WRITE setCurrentIndex NOTIFY currentIndexChanged)
 
 public slots:
-    void updateModel(const QJsonArray &data, const QString &currentCountryCode);
+    void updateModel(const QJsonArray &countries, const QString &currentCountryCode);
 
     int getCurrentIndex();
     void setCurrentIndex(const int i);

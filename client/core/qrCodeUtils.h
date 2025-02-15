@@ -5,7 +5,7 @@
 
 #include "qrcodegen.hpp"
 
-namespace qrCodeUtuls
+namespace qrCodeUtils
 {
     constexpr const qint16 qrMagicCode = 1984;
 

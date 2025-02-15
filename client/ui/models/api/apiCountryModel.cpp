@@ -47,11 +47,11 @@ QVariant ApiCountryModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void ApiCountryModel::updateModel(const QJsonArray &data, const QString &currentCountryCode)
+void ApiCountryModel::updateModel(const QJsonArray &countries, const QString &currentCountryCode)
 {
     beginResetModel();
 
-    m_countries = data;
+    m_countries = countries;
     for (int i = 0; i < m_countries.size(); i++) {
         if (m_countries.at(i).toObject().value(configKey::serverCountryCode).toString() == currentCountryCode) {
             m_currentIndex = i;

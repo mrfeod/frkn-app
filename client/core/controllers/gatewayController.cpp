@@ -1,5 +1,8 @@
 #include "gatewayController.h"
 
+#include <algorithm>
+#include <random>
+
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>

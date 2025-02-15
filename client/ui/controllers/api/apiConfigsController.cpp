@@ -99,8 +99,8 @@ void ApiConfigsController::prepareVpnKeyExport()
 
     auto vpnKey = apiConfigObject.value(apiDefs::key::vpnKey).toString();
 
-    auto qr = qrCodeUtuls::generateQrCode(vpnKey.toUtf8());
-    m_qrCodes << qrCodeUtuls::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
+    auto qr = qrCodeUtils::generateQrCode(vpnKey.toUtf8());
+    m_qrCodes << qrCodeUtils::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
 
     emit vpnKeyExportReady();
 }

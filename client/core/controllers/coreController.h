@@ -26,7 +26,7 @@
 #endif
 #include "ui/models/api/apiAccountInfoModel.h"
 #include "ui/models/api/apiServicesModel.h"
-#include "ui/models/apiCountryModel.h"
+#include "ui/models/api/apiCountryModel.h"
 #include "ui/models/appSplitTunnelingModel.h"
 #include "ui/models/clientManagementModel.h"
 #include "ui/models/protocols/awgConfigModel.h"

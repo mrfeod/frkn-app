@@ -10,6 +10,7 @@
 #include "core/api/apiDefs.h"
 #include "core/api/apiUtils.h"
 #include "core/errorstrings.h"
+#include "core/qrCodeUtils.h"
 #include "core/serialization/serialization.h"
 #include "systemController.h"
 #include "utilities.h"
@@ -579,7 +580,7 @@ bool ImportController::parseQrCodeChunk(const QString &code)
     qint16 magic;
     s >> magic;
 
-    if (magic == amnezia::qrMagicCode) {
+    if (magic == qrCodeUtils::qrMagicCode) {
         quint8 chunksCount;
         s >> chunksCount;
         if (m_totalQrCodeChunksCount != chunksCount) {

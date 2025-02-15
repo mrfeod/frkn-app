@@ -1,5 +1,7 @@
 #include "coreController.h"
 
+#include <QTranslator>
+
 #if defined(Q_OS_ANDROID)
     #include "core/installedAppsImageProvider.h"
     #include "platforms/android/android_controller.h"

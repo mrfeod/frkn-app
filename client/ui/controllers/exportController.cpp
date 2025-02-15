@@ -50,7 +50,7 @@ void ExportController::generateFullAccessConfig()
     compressedConfig = qCompress(compressedConfig, 8);
     m_config = QString("vpn://%1").arg(QString(compressedConfig.toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals)));
 
-    m_qrCodes = qrCodeUtuls::generateQrCodeImageSeries(compressedConfig);
+    m_qrCodes = qrCodeUtils::generateQrCodeImageSeries(compressedConfig);
     emit exportConfigChanged();
 }
 
@@ -92,7 +92,7 @@ void ExportController::generateConnectionConfig(const QString &clientName)
     compressedConfig = qCompress(compressedConfig, 8);
     m_config = QString("vpn://%1").arg(QString(compressedConfig.toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals)));
 
-    m_qrCodes = qrCodeUtuls::generateQrCodeImageSeries(compressedConfig);
+    m_qrCodes = qrCodeUtils::generateQrCodeImageSeries(compressedConfig);
     emit exportConfigChanged();
 }
 
@@ -149,7 +149,7 @@ void ExportController::generateOpenVpnConfig(const QString &clientName)
         m_config.append(line + "\n");
     }
 
-    m_qrCodes = qrCodeUtuls::generateQrCodeImageSeries(m_config.toUtf8());
+    m_qrCodes = qrCodeUtils::generateQrCodeImageSeries(m_config.toUtf8());
     emit exportConfigChanged();
 }
 
@@ -167,8 +167,8 @@ void ExportController::generateWireGuardConfig(const QString &clientName)
         m_config.append(line + "\n");
     }
 
-    auto qr = qrCodeUtuls::generateQrCode(m_config.toUtf8());
-    m_qrCodes << qrCodeUtuls::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
+    auto qr = qrCodeUtils::generateQrCode(m_config.toUtf8());
+    m_qrCodes << qrCodeUtils::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
 
     emit exportConfigChanged();
 }
@@ -187,8 +187,8 @@ void ExportController::generateAwgConfig(const QString &clientName)
         m_config.append(line + "\n");
     }
 
-    auto qr = qrCodeUtuls::generateQrCode(m_config.toUtf8());
-    m_qrCodes << qrCodeUtuls::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
+    auto qr = qrCodeUtils::generateQrCode(m_config.toUtf8());
+    m_qrCodes << qrCodeUtils::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
 
     emit exportConfigChanged();
 }
@@ -221,8 +221,8 @@ void ExportController::generateShadowSocksConfig()
 
     m_nativeConfigString = "ss://" + m_nativeConfigString.toUtf8().toBase64();
 
-    auto qr = qrCodeUtuls::generateQrCode(m_nativeConfigString.toUtf8());
-    m_qrCodes << qrCodeUtuls::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
+    auto qr = qrCodeUtils::generateQrCode(m_nativeConfigString.toUtf8());
+    m_qrCodes << qrCodeUtils::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
 
     emit exportConfigChanged();
 }
