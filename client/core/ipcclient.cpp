@@ -1,7 +1,5 @@
 #include "ipcclient.h"
 #include <QRemoteObjectNode>
-#include <chrono>
-#include <thread>
 
 IpcClient *IpcClient::m_instance = nullptr;
 
@@ -46,14 +44,12 @@ bool IpcClient::init(IpcClient *instance)
     Instance()->m_localSocket = new QLocalSocket(Instance());
     connect(Instance()->m_localSocket.data(), &QLocalSocket::connected, &Instance()->m_ClientNode, []() {
         Instance()->m_ClientNode.addClientSideConnection(Instance()->m_localSocket.data());
-
-        Instance()->m_ipcClient.reset(Instance()->m_ClientNode.acquire<IpcInterfaceReplica>());
-#ifdef Q_OS_WIN
-        std::this_thread::sleep_for(std::chrono::seconds(2)); //< wait until client is ready
-#endif
+        auto cliNode = Instance()->m_ClientNode.acquire<IpcInterfaceReplica>();
+        cliNode->waitForSource(5000);
+        Instance()->m_ipcClient.reset(cliNode);
 
         if (!Instance()->m_ipcClient) {
-            qFatal() << "IpcClient is not ready!";
+            qWarning() << "IpcClient is not ready!";
         }
 
         Instance()->m_ipcClient->waitForSource(1000);
@@ -64,12 +60,12 @@ bool IpcClient::init(IpcClient *instance)
 
         Instance()->m_Tun2SocksClient.reset(Instance()->m_ClientNode.acquire<IpcProcessTun2SocksReplica>());
 
-#ifdef Q_OS_WIN
-        std::this_thread::sleep_for(std::chrono::seconds(5)); //< wait until client is ready
-#endif
+        auto t2sNode = Instance()->m_ClientNode.acquire<IpcInterfaceReplica>();
+        t2sNode->waitForSource(5000);
+        Instance()->m_ipcClient.reset(t2sNode);
 
         if (!Instance()->m_Tun2SocksClient) {
-            qFatal() << "IpcClient::m_Tun2SocksClient is not ready!";
+            qWarning() << "IpcClient::m_Tun2SocksClient is not ready!";
         }
 
         Instance()->m_Tun2SocksClient->waitForSource(1000);
