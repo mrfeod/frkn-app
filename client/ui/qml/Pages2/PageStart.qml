@@ -212,12 +212,7 @@ PageType {
     Connections {
         target: ApiConfigsController
 
-        function onErrorOccurred(error) {
-            PageController.showErrorMessage(error)
-        }
-
         function onInstallServerFromApiFinished(message) {
-            PageController.showBusyIndicator(false)
             if (!ConnectionController.isConnected) {
                 ServersModel.setDefaultServerIndex(ServersModel.getServersCount() - 1);
                 ServersModel.processedIndex = ServersModel.defaultIndex
@@ -228,8 +223,6 @@ PageType {
         }
 
         function onChangeApiCountryFinished(message) {
-            PageController.showBusyIndicator(false)
-
             PageController.goToPageHome()
             PageController.showNotificationMessage(message)
         }

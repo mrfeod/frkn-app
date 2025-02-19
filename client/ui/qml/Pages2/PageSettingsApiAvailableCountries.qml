@@ -139,6 +139,7 @@ PageType {
                             if (!ApiConfigsController.updateServiceFromGateway(ServersModel.defaultIndex, countryCode, countryName)) {
                                 ApiCountryModel.currentIndex = prevIndex
                             }
+                            PageController.showBusyIndicator(false)
                         }
                     }
 

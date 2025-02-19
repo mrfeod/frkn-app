@@ -69,10 +69,11 @@ private:
 
     void updateTranslator(const QLocale &locale);
 
+    void initErrorMessagesHandler();
+
     void initApiCountryModelUpdateHandler();
     void initContainerModelUpdateHandler();
     void initAdminConfigRevokedHandler();
-    void initConnectionErrorOccurredHandler();
     void initPassphraseRequestHandler();
     void initTranslationsUpdatedHandler();
     void initAutoConnectHandler();

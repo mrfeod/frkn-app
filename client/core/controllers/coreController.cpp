@@ -196,10 +196,11 @@ void CoreController::initAppleController()
 
 void CoreController::initSignalHandlers()
 {
+    initErrorMessagesHandler();
+
     initApiCountryModelUpdateHandler();
     initContainerModelUpdateHandler();
     initAdminConfigRevokedHandler();
-    initConnectionErrorOccurredHandler();
     initPassphraseRequestHandler();
     initTranslationsUpdatedHandler();
     initAutoConnectHandler();
@@ -244,6 +245,17 @@ void CoreController::updateTranslator(const QLocale &locale)
     emit translationsUpdated();
 }
 
+void CoreController::initErrorMessagesHandler()
+{
+    connect(m_connectionController.get(), &ConnectionController::connectionErrorOccurred, this, [this](ErrorCode errorCode) {
+        emit m_pageController->showErrorMessage(errorCode);
+        emit m_vpnConnection->connectionStateChanged(Vpn::ConnectionState::Disconnected);
+    });
+
+    connect(m_apiConfigsController.get(), &ApiConfigsController::errorOccurred, m_pageController.get(),
+            qOverload<ErrorCode>(&PageController::showErrorMessage));
+}
+
 void CoreController::setQmlRoot()
 {
     m_systemController->setQmlRoot(m_engine->rootObjects().value(0));
@@ -272,14 +284,6 @@ void CoreController::initAdminConfigRevokedHandler()
 {
     connect(m_clientManagementModel.get(), &ClientManagementModel::adminConfigRevoked, m_serversModel.get(),
             &ServersModel::clearCachedProfile);
-}
-
-void CoreController::initConnectionErrorOccurredHandler()
-{
-    connect(m_connectionController.get(), &ConnectionController::connectionErrorOccurred, this, [this](ErrorCode errorCode) {
-        emit m_pageController->showErrorMessage(errorCode);
-        emit m_vpnConnection->connectionStateChanged(Vpn::ConnectionState::Disconnected);
-    });
 }
 
 void CoreController::initPassphraseRequestHandler()
