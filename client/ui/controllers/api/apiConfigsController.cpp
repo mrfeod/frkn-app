@@ -99,8 +99,7 @@ void ApiConfigsController::prepareVpnKeyExport()
 
     auto vpnKey = apiConfigObject.value(apiDefs::key::vpnKey).toString();
 
-    auto qr = qrCodeUtils::generateQrCode(vpnKey.toUtf8());
-    m_qrCodes << qrCodeUtils::svgToBase64(QString::fromStdString(toSvgString(qr, 1)));
+    m_qrCodes = qrCodeUtils::generateQrCodeImageSeries(vpnKey.toUtf8());
 
     emit vpnKeyExportReady();
 }
@@ -214,6 +213,7 @@ bool ApiConfigsController::updateServiceFromGateway(const int serverIndex, const
         newApiConfig.insert(configKey::userCountryCode, apiConfig.value(configKey::userCountryCode));
         newApiConfig.insert(configKey::serviceType, apiConfig.value(configKey::serviceType));
         newApiConfig.insert(configKey::serviceProtocol, apiConfig.value(configKey::serviceProtocol));
+        newApiConfig.insert(apiDefs::key::vpnKey, apiConfig.value(apiDefs::key::vpnKey));
 
         newServerConfig.insert(configKey::apiConfig, newApiConfig);
         newServerConfig.insert(configKey::authData, authData);

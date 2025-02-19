@@ -163,7 +163,7 @@ PageType {
                     shareConnectionDrawer.headerText = qsTr("Amnezia Premium subscription key")
 
                     shareConnectionDrawer.openTriggered()
-                    shareConnectionDrawer.showSettingsButtonVisible = false;
+                    shareConnectionDrawer.isSelfHostedConfig = false;
                     shareConnectionDrawer.shareButtonText = qsTr("Save VPN key to file")
                     shareConnectionDrawer.copyButtonText = qsTr("Copy VPN key")
 
