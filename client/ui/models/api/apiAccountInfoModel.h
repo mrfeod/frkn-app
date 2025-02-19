@@ -31,6 +31,7 @@ public slots:
     QVariant data(const QString &roleString);
 
     QJsonArray getAvailableCountries();
+    QJsonArray getIssuedConfigsInfo();
     QString getTelegramBotLink();
 
 protected:
@@ -48,6 +49,7 @@ private:
 
     AccountInfoData m_accountInfoData;
     QJsonArray m_availableCountries;
+    QJsonArray m_issuedConfigsInfo;
 };
 
 #endif // APIACCOUNTINFOMODEL_H

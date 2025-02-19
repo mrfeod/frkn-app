@@ -68,4 +68,5 @@ bool ApiSettingsController::getAccountInfo()
 void ApiSettingsController::updateApiCountryModel()
 {
     m_apiCountryModel->updateModel(m_apiAccountInfoModel->getAvailableCountries(), "");
+    m_apiCountryModel->updateIssuedConfigsInfo(m_apiAccountInfoModel->getIssuedConfigsInfo());
 }

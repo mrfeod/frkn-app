@@ -8,14 +8,6 @@
 namespace
 {
     Logger logger("AccountInfoModel");
-
-    namespace configKey
-    {
-        constexpr char availableCountries[] = "available_countries";
-        constexpr char activeDeviceCount[] = "active_device_count";
-        constexpr char maxDeviceCount[] = "max_device_count";
-        constexpr char subscriptionEndDate[] = "subscription_end_date";
-    }
 }
 
 ApiAccountInfoModel::ApiAccountInfoModel(QObject *parent) : QAbstractListModel(parent)
@@ -77,11 +69,12 @@ void ApiAccountInfoModel::updateModel(const QJsonObject &accountInfoObject, cons
 
     AccountInfoData accountInfoData;
 
-    m_availableCountries = accountInfoObject.value(configKey::availableCountries).toArray();
+    m_availableCountries = accountInfoObject.value(apiDefs::key::availableCountries).toArray();
+    m_issuedConfigsInfo = accountInfoObject.value(apiDefs::key::issuedConfigs).toArray();
 
-    accountInfoData.activeDeviceCount = accountInfoObject.value(configKey::activeDeviceCount).toInt();
-    accountInfoData.maxDeviceCount = accountInfoObject.value(configKey::maxDeviceCount).toInt();
-    accountInfoData.subscriptionEndDate = accountInfoObject.value(configKey::subscriptionEndDate).toString();
+    accountInfoData.activeDeviceCount = accountInfoObject.value(apiDefs::key::activeDeviceCount).toInt();
+    accountInfoData.maxDeviceCount = accountInfoObject.value(apiDefs::key::maxDeviceCount).toInt();
+    accountInfoData.subscriptionEndDate = accountInfoObject.value(apiDefs::key::subscriptionEndDate).toString();
 
     accountInfoData.configType = apiUtils::getConfigType(serverConfig);
 
@@ -106,6 +99,11 @@ QVariant ApiAccountInfoModel::data(const QString &roleString)
 QJsonArray ApiAccountInfoModel::getAvailableCountries()
 {
     return m_availableCountries;
+}
+
+QJsonArray ApiAccountInfoModel::getIssuedConfigsInfo()
+{
+    return m_issuedConfigsInfo;
 }
 
 QString ApiAccountInfoModel::getTelegramBotLink()

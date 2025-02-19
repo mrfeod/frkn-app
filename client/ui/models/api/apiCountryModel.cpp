@@ -2,17 +2,12 @@
 
 #include <QJsonObject>
 
+#include "core/api/apiDefs.h"
 #include "logger.h"
 
 namespace
 {
     Logger logger("ApiCountryModel");
-
-    namespace configKey
-    {
-        constexpr char serverCountryCode[] = "server_country_code";
-        constexpr char serverCountryName[] = "server_country_name";
-    }
 }
 
 ApiCountryModel::ApiCountryModel(QObject *parent) : QAbstractListModel(parent)
@@ -30,17 +25,19 @@ QVariant ApiCountryModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || index.row() < 0 || index.row() >= static_cast<int>(rowCount()))
         return QVariant();
 
-    QJsonObject countryInfo = m_countries.at(index.row()).toObject();
+    CountryInfo countryInfo = m_countries.at(index.row());
+    IssuedConfigInfo issuedConfigInfo = m_issuedConfigs.value(countryInfo.countryCode);
+    bool isIssued = !issuedConfigInfo.lastDownloaded.isEmpty();
 
     switch (role) {
     case CountryCodeRole: {
-        return countryInfo.value(configKey::serverCountryCode).toString();
+        return countryInfo.countryCode;
     }
     case CountryNameRole: {
-        return countryInfo.value(configKey::serverCountryName).toString();
+        return countryInfo.countryName;
     }
     case CountryImageCodeRole: {
-        return countryInfo.value(configKey::serverCountryCode).toString().toUpper();
+        return countryInfo.countryCode.toUpper();
     }
     }
 
@@ -51,13 +48,39 @@ void ApiCountryModel::updateModel(const QJsonArray &countries, const QString &cu
 {
     beginResetModel();
 
-    m_countries = countries;
-    for (int i = 0; i < m_countries.size(); i++) {
-        if (m_countries.at(i).toObject().value(configKey::serverCountryCode).toString() == currentCountryCode) {
+    m_countries.clear();
+    for (int i = 0; i < countries.size(); i++) {
+        CountryInfo countryInfo;
+        QJsonObject countryObject = countries.at(i).toObject();
+
+        countryInfo.countryName = countryObject.value(apiDefs::key::serverCountryName).toString();
+        countryInfo.countryCode = countryObject.value(apiDefs::key::serverCountryCode).toString();
+
+        if (countryInfo.countryCode == currentCountryCode) {
             m_currentIndex = i;
             emit currentIndexChanged(m_currentIndex);
-            break;
         }
+        m_countries.push_back(countryInfo);
+    }
+
+    endResetModel();
+}
+
+void ApiCountryModel::updateIssuedConfigsInfo(const QJsonArray &issuedConfigs)
+{
+    beginResetModel();
+
+    for (int i = 0; i < issuedConfigs.size(); i++) {
+        IssuedConfigInfo issuedConfigInfo;
+        QJsonObject issuedConfigObject = issuedConfigs.at(i).toObject();
+
+        issuedConfigInfo.installationUuid = issuedConfigObject.value(apiDefs::key::installationUuid).toString();
+        issuedConfigInfo.workerLastUpdated = issuedConfigObject.value(apiDefs::key::workerLastUpdated).toString();
+        issuedConfigInfo.lastDownloaded = issuedConfigObject.value(apiDefs::key::lastDownloaded).toString();
+        issuedConfigInfo.sourceType = issuedConfigObject.value(apiDefs::key::sourceType).toString();
+        issuedConfigInfo.osVersion = issuedConfigObject.value(apiDefs::key::osVersion).toString();
+
+        m_issuedConfigs.insert(issuedConfigObject.value(apiDefs::key::serverCountryCode).toString(), issuedConfigInfo);
     }
 
     endResetModel();
