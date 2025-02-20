@@ -19,6 +19,7 @@ public:
 
 public slots:
     bool exportNativeConfig(const QString &serverCountryCode, const QString &fileName);
+    bool revokeNativeConfig(const QString &serverCountryCode);
     // bool exportVpnKey(const QString &fileName);
     void prepareVpnKeyExport();
 
@@ -27,6 +28,7 @@ public slots:
     bool updateServiceFromGateway(const int serverIndex, const QString &newCountryCode, const QString &newCountryName,
                                   bool reloadServiceConfig = false);
     bool updateServiceFromTelegram(const int serverIndex);
+    bool deactivateDevice();
 
     bool isConfigValid();
 

@@ -257,9 +257,44 @@ PageType {
                         }
                     }
                     var noButtonFunction = function() {
-                        if (!GC.isMobile()) {
-                            removeButton.forceActiveFocus()
+                    }
+
+                    showQuestionDrawer(headerText, "", yesButtonText, noButtonText, yesButtonFunction, noButtonFunction)
+                }
+            }
+
+            BasicButtonType {
+                id: revokeButton
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: 24
+                Layout.bottomMargin: 16
+                Layout.leftMargin: 8
+                implicitHeight: 32
+
+                defaultColor: "transparent"
+                hoveredColor: AmneziaStyle.color.translucentWhite
+                pressedColor: AmneziaStyle.color.sheerWhite
+                textColor: AmneziaStyle.color.vibrantRed
+
+                text: qsTr("Deactivate the subscription on this device")
+
+                clickedFunc: function() {
+                    var headerText = qsTr("Deactivate the subscription on this device?")
+                    var yesButtonText = qsTr("Continue")
+                    var noButtonText = qsTr("Cancel")
+
+                    var yesButtonFunction = function() {
+                        if (ServersModel.isDefaultServerCurrentlyProcessed() && ConnectionController.isConnected) {
+                            PageController.showNotificationMessage(qsTr("The next time the “Connect” button is pressed, the device will be activated again"))
+                        } else {
+                            PageController.showBusyIndicator(true)
+                            if (ApiConfigsController.deactivateDevice()) {
+                                ApiSettingsController.getAccountInfo()
+                            }
+                            PageController.showBusyIndicator(false)
                         }
+                    }
+                    var noButtonFunction = function() {
                     }
 
                     showQuestionDrawer(headerText, "", yesButtonText, noButtonText, yesButtonFunction, noButtonFunction)
@@ -295,9 +330,6 @@ PageType {
                         }
                     }
                     var noButtonFunction = function() {
-                        if (!GC.isMobile()) {
-                            removeButton.forceActiveFocus()
-                        }
                     }
 
                     showQuestionDrawer(headerText, "", yesButtonText, noButtonText, yesButtonFunction, noButtonFunction)

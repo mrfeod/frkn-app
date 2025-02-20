@@ -60,32 +60,152 @@ PageType {
 
                 text: countryName
                 leftImageSource: "qrc:/countriesFlags/images/flagKit/" + countryImageCode + ".svg"
-                rightImageSource: "qrc:/images/controls/download.svg"
+                rightImageSource: isIssued ? "qrc:/images/controls/more-vertical.svg" : "qrc:/images/controls/download.svg"
 
                 clickedFunction: function() {
-                    var fileName = ""
-                    if (GC.isMobile()) {
-                        fileName = countryCode + configExtension
-                    } else {
-                        fileName = SystemController.getFileName(configCaption,
-                                                                qsTr("Config files (*" + configExtension + ")"),
-                                                                StandardPaths.standardLocations(StandardPaths.DocumentsLocation) + "/" + countryCode,
-                                                                true,
-                                                                configExtension)
+                    if (isIssued) {
+                        moreOptionsDrawer.countryName = countryName
+                        moreOptionsDrawer.countryCode = countryCode
+                        moreOptionsDrawer.openTriggered()
                     }
-                    if (fileName !== "") {
-                        PageController.showBusyIndicator(true)
-                        let result = ApiConfigsController.exportNativeConfig(countryCode, fileName)
-                        PageController.showBusyIndicator(false)
-
-                        if (result) {
-                            PageController.showNotificationMessage(qsTr("Config file saved"))
-                        }
-                    }
+                    issueConfig(countryCode)
                 }
             }
 
             DividerType {}
         }
+    }
+
+    DrawerType2 {
+        id: moreOptionsDrawer
+
+        property string countryName
+        property string countryCode
+
+        anchors.fill: parent
+        expandedHeight: parent.height * 0.4375
+
+        expandedStateContent: Item {
+            implicitHeight: moreOptionsDrawer.expandedHeight
+
+            BackButtonType {
+                id: moreOptionsDrawerBackButton
+
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.topMargin: 16
+
+                backButtonFunction: function() {
+                    moreOptionsDrawer.closeTriggered()
+                }
+            }
+
+            FlickableType {
+                anchors.top: moreOptionsDrawerBackButton.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+
+                contentHeight: moreOptionsDrawerContent.height
+
+                ColumnLayout {
+                    id: moreOptionsDrawerContent
+
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    Header2Type {
+                        Layout.fillWidth: true
+                        Layout.margins: 16
+
+                        headerText: qsTr("Configuration file ") + moreOptionsDrawer.countryName
+                    }
+
+                    LabelWithButtonType {
+                        Layout.fillWidth: true
+
+                        text: qsTr("Create a new")
+                        descriptionText: qsTr("The previously created one will stop working")
+
+                        clickedFunction: function() {
+                            showQuestion(true, moreOptionsDrawer.countryCode, moreOptionsDrawer.countryName)
+                        }
+                    }
+
+                    DividerType {}
+
+                    LabelWithButtonType {
+                        Layout.fillWidth: true
+                        text: qsTr("Revoke the current configuration file")
+
+                        clickedFunction: function() {
+                            showQuestion(false, moreOptionsDrawer.countryCode, moreOptionsDrawer.countryName)
+                        }
+                    }
+
+                    DividerType {}
+                }
+            }
+        }
+    }
+
+    function issueConfig(countryCode) {
+        var fileName = ""
+        if (GC.isMobile()) {
+            fileName = countryCode + configExtension
+        } else {
+            fileName = SystemController.getFileName(configCaption,
+                                                    qsTr("Config files (*" + configExtension + ")"),
+                                                    StandardPaths.standardLocations(StandardPaths.DocumentsLocation) + "/" + countryCode,
+                                                    true,
+                                                    configExtension)
+        }
+        if (fileName !== "") {
+            PageController.showBusyIndicator(true)
+            let result = ApiConfigsController.exportNativeConfig(countryCode, fileName)
+            if (result) {
+                ApiSettingsController.getAccountInfo()
+            }
+
+            PageController.showBusyIndicator(false)
+
+            if (result) {
+                PageController.showNotificationMessage(qsTr("Config file saved"))
+            }
+        }
+    }
+
+    function revokeConfig(countryCode) {
+        PageController.showBusyIndicator(true)
+        let result = ApiConfigsController.revokeNativeConfig(countryCode)
+        if (result) {
+            ApiSettingsController.getAccountInfo()
+        }
+        PageController.showBusyIndicator(false)
+
+        if (result) {
+            PageController.showNotificationMessage(qsTr("The config has been revoked"))
+        }
+    }
+
+    function showQuestion(isConfigIssue, countryCode, countryName) {
+        var headerText = qsTr("Revoke the actual %1 configuration file?").arg(countryName)
+        var descriptionText = qsTr("The previously created file will no longer be valid. It will not be possible to connect using it.")
+        var yesButtonText = qsTr("Continue")
+        var noButtonText = qsTr("Cancel")
+
+        var yesButtonFunction = function() {
+            if (isConfigIssue) {
+                issueConfig(countryCode)
+            } else {
+                revokeConfig(countryCode)
+            }
+        }
+        var noButtonFunction = function() {
+        }
+
+        showQuestionDrawer(headerText, descriptionText, yesButtonText, noButtonText, yesButtonFunction, noButtonFunction)
     }
 }

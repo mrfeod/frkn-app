@@ -73,7 +73,7 @@ bool ApiConfigsController::exportNativeConfig(const QString &serverCountryCode, 
 
     QJsonObject apiPayload = fillApiPayload(protocol, apiPayloadData);
     apiPayload[configKey::userCountryCode] = apiConfigObject.value(configKey::userCountryCode);
-    apiPayload[configKey::serverCountryCode] = apiConfigObject.value(configKey::serverCountryCode);
+    apiPayload[configKey::serverCountryCode] = serverCountryCode;
     apiPayload[configKey::serviceType] = apiConfigObject.value(configKey::serviceType);
     apiPayload[configKey::authData] = serverConfigObject.value(configKey::authData);
     apiPayload[configKey::uuid] = m_settings->getInstallationUuid(true);
@@ -89,6 +89,31 @@ bool ApiConfigsController::exportNativeConfig(const QString &serverCountryCode, 
     QString nativeConfig = jsonConfig.value(configKey::config).toString();
 
     SystemController::saveFile(fileName, nativeConfig);
+    return true;
+}
+
+bool ApiConfigsController::revokeNativeConfig(const QString &serverCountryCode)
+{
+    GatewayController gatewayController(m_settings->getGatewayEndpoint(), m_settings->isDevGatewayEnv(), apiDefs::requestTimeoutMsecs);
+
+    auto serverConfigObject = m_serversModel->getServerConfig(m_serversModel->getProcessedServerIndex());
+    auto apiConfigObject = serverConfigObject.value(configKey::apiConfig).toObject();
+
+    QString protocol = apiConfigObject.value(configKey::serviceProtocol).toString();
+    ApiPayloadData apiPayloadData = generateApiPayloadData(protocol);
+
+    QJsonObject apiPayload = fillApiPayload(protocol, apiPayloadData);
+    apiPayload[configKey::userCountryCode] = apiConfigObject.value(configKey::userCountryCode);
+    apiPayload[configKey::serverCountryCode] = serverCountryCode;
+    apiPayload[configKey::serviceType] = apiConfigObject.value(configKey::serviceType);
+    apiPayload[configKey::authData] = serverConfigObject.value(configKey::authData);
+
+    QByteArray responseBody;
+    ErrorCode errorCode = gatewayController.post(QString("%1v1/revoke_native_config"), apiPayload, responseBody);
+    if (errorCode != ErrorCode::NoError) {
+        emit errorOccurred(errorCode);
+        return false;
+    }
     return true;
 }
 
@@ -281,6 +306,32 @@ bool ApiConfigsController::updateServiceFromTelegram(const int serverIndex)
         fillServerConfig(protocol, apiPayloadData, apiResponseBody, serverConfig);
         m_serversModel->editServer(serverConfig, serverIndex);
         emit updateServerFromApiFinished();
+    }
+    return true;
+}
+
+bool ApiConfigsController::deactivateDevice()
+{
+    GatewayController gatewayController(m_settings->getGatewayEndpoint(), m_settings->isDevGatewayEnv(), apiDefs::requestTimeoutMsecs);
+
+    auto serverConfigObject = m_serversModel->getServerConfig(m_serversModel->getProcessedServerIndex());
+    auto apiConfigObject = serverConfigObject.value(configKey::apiConfig).toObject();
+
+    QString protocol = apiConfigObject.value(configKey::serviceProtocol).toString();
+    ApiPayloadData apiPayloadData = generateApiPayloadData(protocol);
+
+    QJsonObject apiPayload = fillApiPayload(protocol, apiPayloadData);
+    apiPayload[configKey::userCountryCode] = apiConfigObject.value(configKey::userCountryCode);
+    apiPayload[configKey::serverCountryCode] = apiConfigObject.value(configKey::serverCountryCode);
+    apiPayload[configKey::serviceType] = apiConfigObject.value(configKey::serviceType);
+    apiPayload[configKey::authData] = serverConfigObject.value(configKey::authData);
+    apiPayload[configKey::uuid] = m_settings->getInstallationUuid(true);
+
+    QByteArray responseBody;
+    ErrorCode errorCode = gatewayController.post(QString("%1v1/revoke_config"), apiPayload, responseBody);
+    if (errorCode != ErrorCode::NoError) {
+        emit errorOccurred(errorCode);
+        return false;
     }
     return true;
 }
