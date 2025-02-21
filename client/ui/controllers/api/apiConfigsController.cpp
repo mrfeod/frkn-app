@@ -87,6 +87,7 @@ bool ApiConfigsController::exportNativeConfig(const QString &serverCountryCode, 
 
     QJsonObject jsonConfig = QJsonDocument::fromJson(responseBody).object();
     QString nativeConfig = jsonConfig.value(configKey::config).toString();
+    nativeConfig.replace("$WIREGUARD_CLIENT_PRIVATE_KEY", apiPayloadData.wireGuardClientPrivKey);
 
     SystemController::saveFile(fileName, nativeConfig);
     return true;
@@ -123,6 +124,8 @@ void ApiConfigsController::prepareVpnKeyExport()
     auto apiConfigObject = serverConfigObject.value(configKey::apiConfig).toObject();
 
     auto vpnKey = apiConfigObject.value(apiDefs::key::vpnKey).toString();
+
+    vpnKey.replace("vpn://", "");
 
     m_qrCodes = qrCodeUtils::generateQrCodeImageSeries(vpnKey.toUtf8());
 

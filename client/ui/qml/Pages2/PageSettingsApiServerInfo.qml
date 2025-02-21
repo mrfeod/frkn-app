@@ -217,7 +217,7 @@ PageType {
             LabelWithButtonType {
                 Layout.fillWidth: true
 
-                text: qsTr("How to connect on another devicey")
+                text: qsTr("How to connect on another device")
                 rightImageSource: "qrc:/images/controls/chevron-right.svg"
 
                 clickedFunction: function() {
@@ -266,10 +266,11 @@ PageType {
             BasicButtonType {
                 id: revokeButton
                 Layout.alignment: Qt.AlignHCenter
-                Layout.topMargin: 24
                 Layout.bottomMargin: 16
                 Layout.leftMargin: 8
                 implicitHeight: 32
+
+                visible: footer.isVisibleForAmneziaFree
 
                 defaultColor: "transparent"
                 hoveredColor: AmneziaStyle.color.translucentWhite
