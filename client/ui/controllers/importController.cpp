@@ -155,9 +155,9 @@ bool ImportController::extractConfigFromData(QString data)
     if (m_configType == ConfigTypes::Invalid) {
         config.replace("vpn://", "");
         QByteArray ba = QByteArray::fromBase64(config.toUtf8(), QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals);
-        QByteArray ba_uncompressed = qUncompress(ba);
-        if (!ba_uncompressed.isEmpty()) {
-            ba = ba_uncompressed;
+        QByteArray baUncompressed = qUncompress(ba);
+        if (!baUncompressed.isEmpty()) {
+            ba = baUncompressed;
         }
 
         config = ba;
@@ -226,6 +226,21 @@ bool ImportController::extractConfigFromQr(const QByteArray &data)
     if (!ba_uncompressed.isEmpty()) {
         m_config = QJsonDocument::fromJson(ba_uncompressed).object();
         return true;
+    }
+
+    m_configType = checkConfigFormat(data);
+    if (m_configType == ConfigTypes::Invalid) {
+        QByteArray ba = QByteArray::fromBase64(data, QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals);
+        QByteArray baUncompressed = qUncompress(ba);
+
+        if (!baUncompressed.isEmpty()) {
+            ba = baUncompressed;
+        }
+
+        if (!ba.isEmpty()) {
+            m_config = QJsonDocument::fromJson(ba).object();
+            return true;
+        }
     }
 
     return false;
