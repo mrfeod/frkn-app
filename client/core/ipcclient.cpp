@@ -58,11 +58,9 @@ bool IpcClient::init(IpcClient *instance)
             qWarning() << "IpcClient replica is not connected!";
         }
 
-        Instance()->m_Tun2SocksClient.reset(Instance()->m_ClientNode.acquire<IpcProcessTun2SocksReplica>());
-
-        auto t2sNode = Instance()->m_ClientNode.acquire<IpcInterfaceReplica>();
+        auto t2sNode = Instance()->m_ClientNode.acquire<IpcProcessTun2SocksReplica>();
         t2sNode->waitForSource(5000);
-        Instance()->m_ipcClient.reset(t2sNode);
+        Instance()->m_Tun2SocksClient.reset(t2sNode);
 
         if (!Instance()->m_Tun2SocksClient) {
             qWarning() << "IpcClient::m_Tun2SocksClient is not ready!";
