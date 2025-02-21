@@ -41,7 +41,7 @@ PageType {
         id: androidTv
 
         readonly property string title: qsTr("AndroidTV")
-        readonly property string link: qsTr("")
+        readonly property string link: qsTr("https://docs.amnezia.org/ru/documentation/instructions/android_tv_connect/")
     }
 
     QtObject {
