@@ -128,7 +128,17 @@ PageType {
             width: listView.width
             spacing: 0
 
+            Connections {
+                target: ApiAccountInfoModel
+
+                function onModelReset() {
+                    delegateItem.rightText = ApiAccountInfoModel.data(contentKey)
+                }
+            }
+
             LabelWithImageType {
+                id: delegateItem
+
                 Layout.fillWidth: true
                 Layout.margins: 16
 
@@ -290,7 +300,7 @@ PageType {
                         } else {
                             PageController.showBusyIndicator(true)
                             if (ApiConfigsController.deactivateDevice()) {
-                                ApiSettingsController.getAccountInfo()
+                                ApiSettingsController.getAccountInfo(true)
                             }
                             PageController.showBusyIndicator(false)
                         }

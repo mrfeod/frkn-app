@@ -1,13 +1,13 @@
 #include "apiConfigsController.h"
 
 #include <QEventLoop>
+#include <QClipboard>
 
 #include "amnezia_application.h"
 #include "configurators/wireguard_configurator.h"
 #include "core/api/apiDefs.h"
 #include "core/api/apiUtils.h"
 #include "core/controllers/gatewayController.h"
-#include "core/networkUtilities.h"
 #include "core/qrCodeUtils.h"
 #include "ui/controllers/systemController.h"
 #include "version.h"
@@ -76,7 +76,6 @@ bool ApiConfigsController::exportNativeConfig(const QString &serverCountryCode, 
     apiPayload[configKey::serverCountryCode] = serverCountryCode;
     apiPayload[configKey::serviceType] = apiConfigObject.value(configKey::serviceType);
     apiPayload[configKey::authData] = serverConfigObject.value(configKey::authData);
-    apiPayload[configKey::uuid] = m_settings->getInstallationUuid(true);
 
     QByteArray responseBody;
     ErrorCode errorCode = gatewayController.post(QString("%1v1/native_config"), apiPayload, responseBody);
@@ -124,12 +123,19 @@ void ApiConfigsController::prepareVpnKeyExport()
     auto apiConfigObject = serverConfigObject.value(configKey::apiConfig).toObject();
 
     auto vpnKey = apiConfigObject.value(apiDefs::key::vpnKey).toString();
+    m_vpnKey = vpnKey;
 
     vpnKey.replace("vpn://", "");
 
     m_qrCodes = qrCodeUtils::generateQrCodeImageSeries(vpnKey.toUtf8());
 
     emit vpnKeyExportReady();
+}
+
+void ApiConfigsController::copyVpnKeyToClipboard()
+{
+    auto clipboard = amnApp->getClipboard();
+    clipboard->setText(m_vpnKey);
 }
 
 bool ApiConfigsController::fillAvailableServices()
@@ -288,7 +294,7 @@ bool ApiConfigsController::updateServiceFromTelegram(const int serverIndex)
 
         QByteArray requestBody = QJsonDocument(apiPayload).toJson();
 
-        QNetworkReply *reply = amnApp->manager()->post(request, requestBody);
+        QNetworkReply *reply = amnApp->networkManager()->post(request, requestBody);
 
         QEventLoop wait;
         connect(reply, &QNetworkReply::finished, &wait, &QEventLoop::quit);
@@ -476,4 +482,9 @@ QList<QString> ApiConfigsController::getQrCodes()
 int ApiConfigsController::getQrCodesCount()
 {
     return m_qrCodes.size();
+}
+
+QString ApiConfigsController::getVpnKey()
+{
+    return m_vpnKey;
 }

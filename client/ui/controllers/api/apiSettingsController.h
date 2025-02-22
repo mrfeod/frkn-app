@@ -17,7 +17,7 @@ public:
     ~ApiSettingsController();
 
 public slots:
-    bool getAccountInfo();
+    bool getAccountInfo(bool reload);
     void updateApiCountryModel();
 
 signals:

@@ -116,7 +116,7 @@ ListView {
                                 PageController.goToPage(PageEnum.PageSettingsApiAvailableCountries)
                             } else {
                                 PageController.showBusyIndicator(true)
-                                let result = ApiSettingsController.getAccountInfo()
+                                let result = ApiSettingsController.getAccountInfo(false)
                                 PageController.showBusyIndicator(false)
                                 if (!result) {
                                     return

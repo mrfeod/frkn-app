@@ -11,6 +11,7 @@
 #else
     #include <QApplication>
 #endif
+#include <QClipboard>
 
 #include "core/controllers/coreController.h"
 #include "settings.h"
@@ -41,10 +42,8 @@ public:
 #endif
 
     QQmlApplicationEngine *qmlEngine() const;
-    QNetworkAccessManager *manager()
-    {
-        return m_nam;
-    }
+    QNetworkAccessManager *networkManager();
+    QClipboard *getClipboard();
 
 private:
     QQmlApplicationEngine *m_engine {};

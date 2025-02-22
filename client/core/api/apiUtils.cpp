@@ -27,15 +27,19 @@ apiDefs::ConfigType apiUtils::getConfigType(const QJsonObject &serverConfigObjec
     case apiDefs::ConfigSource::Telegram: {
     };
     case apiDefs::ConfigSource::AmneziaGateway: {
-        constexpr QLatin1String premium("prem");
-        constexpr QLatin1String free("free");
+        constexpr QLatin1String stackPremium("prem");
+        constexpr QLatin1String stackFree("free");
+
+        constexpr QLatin1String servicePremium("amnezia-premium");
+        constexpr QLatin1String serviceFree("amnezia-free");
 
         auto apiConfigObject = serverConfigObject.value(apiDefs::key::apiConfig).toObject();
         auto stackType = apiConfigObject.value(apiDefs::key::stackType).toString();
+        auto serviceType = apiConfigObject.value(apiDefs::key::serviceType).toString();
 
-        if (stackType == premium) {
+        if (serviceType == servicePremium || stackType == stackPremium) {
             return apiDefs::ConfigType::AmneziaPremiumV2;
-        } else if (stackType == free) {
+        } else if (serviceType == serviceFree || stackType == stackFree) {
             return apiDefs::ConfigType::AmneziaFreeV3;
         }
     }

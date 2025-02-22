@@ -54,7 +54,6 @@ PageType {
             width: listView.width
 
             LabelWithButtonType {
-                id: telegramButton
                 Layout.fillWidth: true
                 Layout.topMargin: 6
 
@@ -67,8 +66,9 @@ PageType {
                         moreOptionsDrawer.countryName = countryName
                         moreOptionsDrawer.countryCode = countryCode
                         moreOptionsDrawer.openTriggered()
+                    } else {
+                        issueConfig(countryCode)
                     }
-                    issueConfig(countryCode)
                 }
             }
 
@@ -166,11 +166,10 @@ PageType {
             PageController.showBusyIndicator(true)
             let result = ApiConfigsController.exportNativeConfig(countryCode, fileName)
             if (result) {
-                ApiSettingsController.getAccountInfo()
+                ApiSettingsController.getAccountInfo(true)
             }
 
             PageController.showBusyIndicator(false)
-
             if (result) {
                 PageController.showNotificationMessage(qsTr("Config file saved"))
             }
@@ -181,7 +180,7 @@ PageType {
         PageController.showBusyIndicator(true)
         let result = ApiConfigsController.revokeNativeConfig(countryCode)
         if (result) {
-            ApiSettingsController.getAccountInfo()
+            ApiSettingsController.getAccountInfo(true)
         }
         PageController.showBusyIndicator(false)
 
@@ -202,6 +201,7 @@ PageType {
             } else {
                 revokeConfig(countryCode)
             }
+            moreOptionsDrawer.closeTriggered()
         }
         var noButtonFunction = function() {
         }

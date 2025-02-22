@@ -8,6 +8,8 @@
 namespace
 {
     Logger logger("ApiCountryModel");
+
+    constexpr QLatin1String countryConfig("country_config");
 }
 
 ApiCountryModel::ApiCountryModel(QObject *parent) : QAbstractListModel(parent)
@@ -27,7 +29,7 @@ QVariant ApiCountryModel::data(const QModelIndex &index, int role) const
 
     CountryInfo countryInfo = m_countries.at(index.row());
     IssuedConfigInfo issuedConfigInfo = m_issuedConfigs.value(countryInfo.countryCode);
-    bool isIssued = !issuedConfigInfo.lastDownloaded.isEmpty();
+    bool isIssued = issuedConfigInfo.sourceType == countryConfig;
 
     switch (role) {
     case CountryCodeRole: {
@@ -73,9 +75,14 @@ void ApiCountryModel::updateIssuedConfigsInfo(const QJsonArray &issuedConfigs)
 {
     beginResetModel();
 
+    m_issuedConfigs.clear();
     for (int i = 0; i < issuedConfigs.size(); i++) {
         IssuedConfigInfo issuedConfigInfo;
         QJsonObject issuedConfigObject = issuedConfigs.at(i).toObject();
+
+        if (issuedConfigObject.value(apiDefs::key::sourceType).toString() != countryConfig) {
+            continue;
+        }
 
         issuedConfigInfo.installationUuid = issuedConfigObject.value(apiDefs::key::installationUuid).toString();
         issuedConfigInfo.workerLastUpdated = issuedConfigObject.value(apiDefs::key::workerLastUpdated).toString();

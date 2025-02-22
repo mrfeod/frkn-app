@@ -47,7 +47,7 @@ ErrorCode GatewayController::get(const QString &endpoint, QByteArray &responseBo
     request.setUrl(QString(endpoint).arg(m_gatewayEndpoint));
 
     QNetworkReply *reply;
-    reply = amnApp->manager()->get(request);
+    reply = amnApp->networkManager()->get(request);
 
     QEventLoop wait;
     QObject::connect(reply, &QNetworkReply::finished, &wait, &QEventLoop::quit);
@@ -61,7 +61,7 @@ ErrorCode GatewayController::get(const QString &endpoint, QByteArray &responseBo
     if (sslErrors.isEmpty() && shouldBypassProxy(reply, responseBody, false)) {
         auto requestFunction = [&request, &responseBody](const QString &url) {
             request.setUrl(url);
-            return amnApp->manager()->get(request);
+            return amnApp->networkManager()->get(request);
         };
 
         auto replyProcessingFunction = [&responseBody, &reply, &sslErrors, this](QNetworkReply *nestedReply,
@@ -137,7 +137,7 @@ ErrorCode GatewayController::post(const QString &endpoint, const QJsonObject api
     requestBody[configKey::keyPayload] = QString(encryptedKeyPayload.toBase64());
     requestBody[configKey::apiPayload] = QString(encryptedApiPayload.toBase64());
 
-    QNetworkReply *reply = amnApp->manager()->post(request, QJsonDocument(requestBody).toJson());
+    QNetworkReply *reply = amnApp->networkManager()->post(request, QJsonDocument(requestBody).toJson());
 
     QEventLoop wait;
     connect(reply, &QNetworkReply::finished, &wait, &QEventLoop::quit);
@@ -151,7 +151,7 @@ ErrorCode GatewayController::post(const QString &endpoint, const QJsonObject api
     if (sslErrors.isEmpty() && shouldBypassProxy(reply, encryptedResponseBody, false)) {
         auto requestFunction = [&request, &encryptedResponseBody, &requestBody](const QString &url) {
             request.setUrl(url);
-            return amnApp->manager()->post(request, QJsonDocument(requestBody).toJson());
+            return amnApp->networkManager()->post(request, QJsonDocument(requestBody).toJson());
         };
 
         auto replyProcessingFunction = [&encryptedResponseBody, &reply, &sslErrors, &key, &iv, &salt,
@@ -205,7 +205,7 @@ QStringList GatewayController::getProxyUrls()
 
     for (const auto &proxyStorageUrl : proxyStorageUrl) {
         request.setUrl(proxyStorageUrl);
-        reply = amnApp->manager()->get(request);
+        reply = amnApp->networkManager()->get(request);
 
         connect(reply, &QNetworkReply::finished, &wait, &QEventLoop::quit);
         connect(reply, &QNetworkReply::sslErrors, [this, &sslErrors](const QList<QSslError> &errors) { sslErrors = errors; });
@@ -256,6 +256,8 @@ QStringList GatewayController::getProxyUrls()
 bool GatewayController::shouldBypassProxy(QNetworkReply *reply, const QByteArray &responseBody, bool checkEncryption, const QByteArray &key,
                                           const QByteArray &iv, const QByteArray &salt)
 {
+    qDebug() << reply->error();
+    qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (reply->error() == QNetworkReply::NetworkError::OperationCanceledError || reply->error() == QNetworkReply::NetworkError::TimeoutError) {
         qDebug() << "Timeout occurred";
         return true;

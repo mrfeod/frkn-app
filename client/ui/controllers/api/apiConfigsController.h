@@ -16,12 +16,14 @@ public:
 
     Q_PROPERTY(QList<QString> qrCodes READ getQrCodes NOTIFY vpnKeyExportReady)
     Q_PROPERTY(int qrCodesCount READ getQrCodesCount NOTIFY vpnKeyExportReady)
+    Q_PROPERTY(QString vpnKey READ getVpnKey NOTIFY vpnKeyExportReady)
 
 public slots:
     bool exportNativeConfig(const QString &serverCountryCode, const QString &fileName);
     bool revokeNativeConfig(const QString &serverCountryCode);
     // bool exportVpnKey(const QString &fileName);
     void prepareVpnKeyExport();
+    void copyVpnKeyToClipboard();
 
     bool fillAvailableServices();
     bool importServiceFromGateway();
@@ -58,8 +60,10 @@ private:
 
     QList<QString> getQrCodes();
     int getQrCodesCount();
+    QString getVpnKey();
 
     QList<QString> m_qrCodes;
+    QString m_vpnKey;
 
     QSharedPointer<ServersModel> m_serversModel;
     QSharedPointer<ApiServicesModel> m_apiServicesModel;

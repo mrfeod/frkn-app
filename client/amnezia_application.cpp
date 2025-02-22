@@ -202,3 +202,13 @@ QQmlApplicationEngine *AmneziaApplication::qmlEngine() const
 {
     return m_engine;
 }
+
+QNetworkAccessManager *AmneziaApplication::networkManager()
+{
+    return m_nam;
+}
+
+QClipboard *AmneziaApplication::getClipboard()
+{
+    return this->clipboard();
+}

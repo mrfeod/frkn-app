@@ -1,5 +1,8 @@
 #include "apiSettingsController.h"
 
+#include <QEventLoop>
+#include <QTimer>
+
 #include "core/api/apiUtils.h"
 #include "core/controllers/gatewayController.h"
 
@@ -35,8 +38,14 @@ ApiSettingsController::~ApiSettingsController()
 {
 }
 
-bool ApiSettingsController::getAccountInfo()
+bool ApiSettingsController::getAccountInfo(bool reload)
 {
+    if (reload) {
+        QEventLoop wait;
+        QTimer::singleShot(1000, &wait, &QEventLoop::quit);
+        wait.exec();
+    }
+
     GatewayController gatewayController(m_settings->getGatewayEndpoint(), m_settings->isDevGatewayEnv(), requestTimeoutMsecs);
 
     auto processedIndex = m_serversModel->getProcessedServerIndex();
@@ -61,6 +70,10 @@ bool ApiSettingsController::getAccountInfo()
 
     QJsonObject accountInfo = QJsonDocument::fromJson(responseBody).object();
     m_apiAccountInfoModel->updateModel(accountInfo, serverConfig);
+
+    if (reload) {
+        updateApiCountryModel();
+    }
 
     return true;
 }

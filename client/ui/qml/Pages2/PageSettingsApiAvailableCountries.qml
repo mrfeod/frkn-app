@@ -93,7 +93,7 @@ PageType {
 
                 actionButtonFunction: function() {
                     PageController.showBusyIndicator(true)
-                    let result = ApiSettingsController.getAccountInfo()
+                    let result = ApiSettingsController.getAccountInfo(false)
                     PageController.showBusyIndicator(false)
                     if (!result) {
                         return
