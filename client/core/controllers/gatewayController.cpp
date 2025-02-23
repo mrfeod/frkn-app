@@ -240,7 +240,7 @@ QStringList GatewayController::getProxyUrls()
         }
     } catch (...) {
         Utils::logException();
-        qCritical() << "error loading private key from environment variables or decrypting payload";
+        qCritical() << "error loading private key from environment variables or decrypting payload" << encryptedResponseBody;
         return {};
     }
 
@@ -256,8 +256,6 @@ QStringList GatewayController::getProxyUrls()
 bool GatewayController::shouldBypassProxy(QNetworkReply *reply, const QByteArray &responseBody, bool checkEncryption, const QByteArray &key,
                                           const QByteArray &iv, const QByteArray &salt)
 {
-    qDebug() << reply->error();
-    qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (reply->error() == QNetworkReply::NetworkError::OperationCanceledError || reply->error() == QNetworkReply::NetworkError::TimeoutError) {
         qDebug() << "Timeout occurred";
         return true;
