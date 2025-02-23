@@ -57,6 +57,7 @@ apiDefs::ConfigSource apiUtils::getConfigSource(const QJsonObject &serverConfigO
 amnezia::ErrorCode apiUtils::checkNetworkReplyErrors(const QList<QSslError> &sslErrors, QNetworkReply *reply)
 {
     const int httpStatusCodeConflict = 409;
+    const int httpStatusCodeNotFound = 404;
 
     if (!sslErrors.empty()) {
         qDebug().noquote() << sslErrors;
@@ -75,6 +76,8 @@ amnezia::ErrorCode apiUtils::checkNetworkReplyErrors(const QList<QSslError> &ssl
         qDebug() << httpStatusCode;
         if (httpStatusCode == httpStatusCodeConflict) {
             return amnezia::ErrorCode::ApiConfigLimitError;
+        } else if (httpStatusCode == httpStatusCodeNotFound) {
+            return amnezia::ErrorCode::ApiNotFoundError;
         }
         return amnezia::ErrorCode::ApiConfigDownloadError;
     }

@@ -110,7 +110,7 @@ bool ApiConfigsController::revokeNativeConfig(const QString &serverCountryCode)
 
     QByteArray responseBody;
     ErrorCode errorCode = gatewayController.post(QString("%1v1/revoke_native_config"), apiPayload, responseBody);
-    if (errorCode != ErrorCode::NoError) {
+    if (errorCode != ErrorCode::NoError && errorCode != ErrorCode::ApiNotFoundError) {
         emit errorOccurred(errorCode);
         return false;
     }
@@ -323,8 +323,13 @@ bool ApiConfigsController::deactivateDevice()
 {
     GatewayController gatewayController(m_settings->getGatewayEndpoint(), m_settings->isDevGatewayEnv(), apiDefs::requestTimeoutMsecs);
 
-    auto serverConfigObject = m_serversModel->getServerConfig(m_serversModel->getProcessedServerIndex());
+    auto serverIndex = m_serversModel->getProcessedServerIndex();
+    auto serverConfigObject = m_serversModel->getServerConfig(serverIndex);
     auto apiConfigObject = serverConfigObject.value(configKey::apiConfig).toObject();
+
+    if (apiUtils::getConfigType(serverConfigObject) != apiDefs::ConfigType::AmneziaPremiumV2) {
+        return true;
+    }
 
     QString protocol = apiConfigObject.value(configKey::serviceProtocol).toString();
     ApiPayloadData apiPayloadData = generateApiPayloadData(protocol);
@@ -338,10 +343,14 @@ bool ApiConfigsController::deactivateDevice()
 
     QByteArray responseBody;
     ErrorCode errorCode = gatewayController.post(QString("%1v1/revoke_config"), apiPayload, responseBody);
-    if (errorCode != ErrorCode::NoError) {
+    if (errorCode != ErrorCode::NoError && errorCode != ErrorCode::ApiNotFoundError) {
         emit errorOccurred(errorCode);
         return false;
     }
+
+    serverConfigObject.remove(config_key::containers);
+    m_serversModel->editServer(serverConfigObject, serverIndex);
+
     return true;
 }
 

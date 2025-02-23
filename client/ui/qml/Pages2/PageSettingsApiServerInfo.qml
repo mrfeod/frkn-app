@@ -164,7 +164,7 @@ PageType {
                 Layout.fillWidth: true
                 Layout.topMargin: 32
 
-                visible: footer.isVisibleForAmneziaFree
+                visible: false //footer.isVisibleForAmneziaFree
 
                 text: qsTr("Subscription key")
                 rightImageSource: "qrc:/images/controls/chevron-right.svg"
@@ -187,11 +187,12 @@ PageType {
             }
 
             DividerType {
-                visible: footer.isVisibleForAmneziaFree
+                visible: false //footer.isVisibleForAmneziaFree
             }
 
             LabelWithButtonType {
                 Layout.fillWidth: true
+                Layout.topMargin: 32
 
                 visible: footer.isVisibleForAmneziaFree
 
@@ -336,7 +337,9 @@ PageType {
                             PageController.showNotificationMessage(qsTr("Cannot remove server during active connection"))
                         } else {
                             PageController.showBusyIndicator(true)
-                            InstallController.removeProcessedServer()
+                            if (ApiConfigsController.deactivateDevice()) {
+                                InstallController.removeProcessedServer()
+                            }
                             PageController.showBusyIndicator(false)
                         }
                     }
