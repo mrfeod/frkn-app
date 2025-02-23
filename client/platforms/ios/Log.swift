@@ -14,7 +14,7 @@ struct Log {
     }
   }
 
-  private static let appGroupID = "group.org.frkn.AmneziaVPN"
+  private static let appGroupID = "group.org.frkn.client"
 
   static let appLogURL = {
     let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID)!

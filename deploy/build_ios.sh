@@ -32,7 +32,7 @@ cmake --version
 clang -v
 
 # Generate XCodeProj
-$QT_BIN_DIR/qt-cmake . -B $BUILD_DIR -GXcode -DQT_HOST_PATH=$QT_MACOS_ROOT_DIR
+$QT_BIN_DIR/qt-cmake . -B $BUILD_DIR -GXcode -DQT_HOST_PATH=$QT_MACOS_ROOT_DIR -DQT_HOST_PATH_CMAKE_DIR=$QT_MACOS_ROOT_DIR
 
 KEYCHAIN=frkn.build.ios.keychain
 KEYCHAIN_FILE=$HOME/Library/Keychains/${KEYCHAIN}-db
@@ -51,6 +51,10 @@ if [ "${IOS_SIGNING_CERT_BASE64+x}" ]; then
   shasum -a 256 $SIGNING_CERT_P12
 
   KEYCHAIN_PASS=$IOS_SIGNING_CERT_PASSWORD
+
+  if [ -f $KEYCHAIN_FILE ]; then
+    security delete-keychain $KEYCHAIN
+  fi
 
   security create-keychain -p $KEYCHAIN_PASS $KEYCHAIN || true
   security default-keychain -s $KEYCHAIN

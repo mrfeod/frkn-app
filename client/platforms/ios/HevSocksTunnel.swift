@@ -1,4 +1,5 @@
 import HevSocks5Tunnel
+import Darwin
 
 public enum Socks5Tunnel {
 
