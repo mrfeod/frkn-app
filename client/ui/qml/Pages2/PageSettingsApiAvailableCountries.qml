@@ -44,18 +44,10 @@ PageType {
         }
     }
 
-    ListView {
+    ListViewType {
         id: menuContent
 
-        property bool isFocusable: true
-
         anchors.fill: parent
-
-        ScrollBar.vertical: ScrollBarType {}
-
-        clip: true
-        reuseItems: true
-        snapMode: ListView.SnapToItem
 
         model: ApiCountryModel
 
