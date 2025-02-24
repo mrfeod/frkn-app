@@ -31,6 +31,11 @@ namespace PageLoader
         PageSettingsLogging,
         PageSettingsSplitTunneling,
         PageSettingsAppSplitTunneling,
+        PageSettingsApiServerInfo,
+        PageSettingsApiAvailableCountries,
+        PageSettingsApiSupport,
+        PageSettingsApiInstructions,
+        PageSettingsApiNativeConfigs,
 
         PageServiceSftpSettings,
         PageServiceTorWebsiteSettings,
@@ -53,7 +58,7 @@ namespace PageLoader
         PageProtocolOpenVpnSettings,
         PageProtocolShadowSocksSettings,
         PageProtocolCloakSettings,
-        PageProtocolXraySettings,        
+        PageProtocolXraySettings,
         PageProtocolWireGuardSettings,
         PageProtocolAwgSettings,
         PageProtocolIKev2Settings,
@@ -104,7 +109,7 @@ public slots:
     int incrementDrawerDepth();
     int decrementDrawerDepth();
 
-  private slots:
+private slots:
     void onShowErrorMessage(amnezia::ErrorCode errorCode);
 
 signals:
