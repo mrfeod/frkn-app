@@ -20,6 +20,9 @@ CoreController::CoreController(const QSharedPointer<VpnConnection> &vpnConnectio
     initControllers();
     initSignalHandlers();
 
+    initAndroidController();
+    initAppleController();
+
     initNotificationHandler();
 
     auto locale = m_settings->getAppLanguage();
