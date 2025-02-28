@@ -28,7 +28,7 @@ PageType {
 
         readonly property string title: qsTr("Subscription status")
         readonly property string contentKey: "subscriptionStatus"
-        readonly property string objectImageSource: "qrc:/images/controls/map-pin.svg"
+        readonly property string objectImageSource: "qrc:/images/controls/info.svg"
     }
 
     QtObject {
@@ -44,7 +44,7 @@ PageType {
 
         readonly property string title: qsTr("Connected devices")
         readonly property string contentKey: "connectedDevices"
-        readonly property string objectImageSource: "qrc:/images/controls/gauge.svg"
+        readonly property string objectImageSource: "qrc:/images/controls/monitor.svg"
     }
 
     property var processedServer
@@ -158,11 +158,28 @@ PageType {
 
             readonly property bool isVisibleForAmneziaFree: ApiAccountInfoModel.data("isComponentVisible")
 
+            WarningType {
+                id: warning
+
+                Layout.topMargin: 32
+                Layout.rightMargin: 16
+                Layout.leftMargin: 16
+                Layout.fillWidth: true
+
+                backGroundColor: AmneziaStyle.color.translucentRichBrown
+
+                textString: qsTr("Configurations have been updated for some countries. Download and install the updated configuration files")
+
+                iconPath: "qrc:/images/controls/alert-circle.svg"
+
+                visible: ApiAccountInfoModel.data("hasExpiredWorker")
+            }
+
             LabelWithButtonType {
                 id: vpnKey
 
                 Layout.fillWidth: true
-                Layout.topMargin: 32
+                Layout.topMargin: warning.visible ? 16 : 32
 
                 visible: false //footer.isVisibleForAmneziaFree
 
@@ -192,7 +209,7 @@ PageType {
 
             LabelWithButtonType {
                 Layout.fillWidth: true
-                Layout.topMargin: 32
+                Layout.topMargin: warning.visible ? 16 : 32
 
                 visible: footer.isVisibleForAmneziaFree
 
@@ -204,6 +221,26 @@ PageType {
                 clickedFunction: function() {
                     ApiSettingsController.updateApiCountryModel()
                     PageController.goToPage(PageEnum.PageSettingsApiNativeConfigs)
+                }
+            }
+
+            DividerType {
+                visible: footer.isVisibleForAmneziaFree
+            }
+
+            LabelWithButtonType {
+                Layout.fillWidth: true
+
+                visible: footer.isVisibleForAmneziaFree
+
+                text: qsTr("Connected devices")
+
+                descriptionText: qsTr("To manage connected devices")
+                rightImageSource: "qrc:/images/controls/chevron-right.svg"
+
+                clickedFunction: function() {
+                    ApiSettingsController.updateApiDevicesModel()
+                    PageController.goToPage(PageEnum.PageSettingsApiDevices)
                 }
             }
 
@@ -292,12 +329,13 @@ PageType {
 
                 clickedFunc: function() {
                     var headerText = qsTr("Deactivate the subscription on this device?")
+                    var descriptionText = qsTr("The next time the “Connect” button is pressed, the device will be activated again")
                     var yesButtonText = qsTr("Continue")
                     var noButtonText = qsTr("Cancel")
 
                     var yesButtonFunction = function() {
                         if (ServersModel.isDefaultServerCurrentlyProcessed() && ConnectionController.isConnected) {
-                            PageController.showNotificationMessage(qsTr("The next time the “Connect” button is pressed, the device will be activated again"))
+                            PageController.showNotificationMessage(qsTr("Cannot deactivate subscription during active connection"))
                         } else {
                             PageController.showBusyIndicator(true)
                             if (ApiConfigsController.deactivateDevice()) {
@@ -309,7 +347,7 @@ PageType {
                     var noButtonFunction = function() {
                     }
 
-                    showQuestionDrawer(headerText, "", yesButtonText, noButtonText, yesButtonFunction, noButtonFunction)
+                    showQuestionDrawer(headerText, descriptionText, yesButtonText, noButtonText, yesButtonFunction, noButtonFunction)
                 }
             }
 
