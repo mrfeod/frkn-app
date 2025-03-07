@@ -26,6 +26,10 @@ namespace
         constexpr char apiPayload[] = "api_payload";
         constexpr char keyPayload[] = "key_payload";
     }
+
+    constexpr QLatin1String errorResponsePattern1("No active configuration found for");
+    constexpr QLatin1String errorResponsePattern2("No non-revoked public key found for");
+    constexpr QLatin1String errorResponsePattern3("Account not found.");
 }
 
 GatewayController::GatewayController(const QString &gatewayEndpoint, bool isDevEnvironment, int requestTimeoutMsecs, QObject *parent)
@@ -262,7 +266,16 @@ bool GatewayController::shouldBypassProxy(QNetworkReply *reply, const QByteArray
     } else if (responseBody.contains("html")) {
         qDebug() << "The response contains an html tag";
         return true;
-    } else if (reply->error() == QNetworkReply::NetworkError::NoError && checkEncryption) {
+    } else if (reply->error() == QNetworkReply::NetworkError::ContentNotFoundError) {
+        if (responseBody.contains(errorResponsePattern1) || responseBody.contains(errorResponsePattern2)
+            || responseBody.contains(errorResponsePattern3)) {
+            return false;
+        } else {
+            return true;
+        }
+    } else if (reply->error() != QNetworkReply::NetworkError::NoError) {
+        return true;
+    } else if (checkEncryption) {
         try {
             QSimpleCrypto::QBlockCipher blockCipher;
             static_cast<void>(blockCipher.decryptAesBlockCipher(responseBody, key, iv, "", salt));
