@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25.0 FATAL_ERROR)
 
 set(PROJECT FRKN)
 
-project(${PROJECT} VERSION 4.8.2.3
+project(${PROJECT} VERSION 4.8.3.1
         DESCRIPTION "FRKN"
         HOMEPAGE_URL "https://frkn.org/"
 )
