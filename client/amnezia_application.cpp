@@ -2,6 +2,7 @@
 
 #include <QClipboard>
 #include <QDebug>
+#include <QDirIterator>
 #include <QFontDatabase>
 #include <QMimeData>
 #include <QQuickItem>
@@ -254,7 +255,22 @@ void AmneziaApplication::updateTranslator(const QLocale &locale)
         QCoreApplication::removeTranslator(m_translator.get());
     }
 
-    QString strFileName = QString(":/translations/amneziavpn") + QLatin1String("_") + locale.name() + ".qm";
+    QStringList availableTranslations;
+    QDirIterator it(":/translations", QStringList() << "amneziavpn_*.qm", QDir::Files);
+    while (it.hasNext()) {
+        availableTranslations << it.next();
+    }
+
+    const QString lang = locale.name().split("_").first();
+    const QString filePrefix = QString(":/translations/amneziavpn_") + lang;
+    QString strFileName(":/translations/amneziavpn_en_US.qm");
+    for (const QString &translation : availableTranslations) {
+        if (translation.contains(filePrefix)) {
+            strFileName = translation;
+            break;
+        }
+    }
+
     if (m_translator->load(strFileName)) {
         if (QCoreApplication::installTranslator(m_translator.get())) {
             m_settings->setAppLanguage(locale);
