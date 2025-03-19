@@ -1,3 +1,5 @@
+[![Deploy workflow](https://github.com/frkn-dev/client/actions/workflows/deploy.yml/badge.svg?branch=dev)](https://github.com/frkn-dev/client/actions/workflows/deploy.yml)
+
 # FRKN — Free VPN for Free people
 
 <div style="display: flex; align-items: center;">
