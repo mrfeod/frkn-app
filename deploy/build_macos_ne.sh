@@ -10,6 +10,13 @@ do
     esac
 done
 
+# The NE build requires signing certificates. Exit gracefully if they
+# are not available (e.g. when running in CI without configured secrets).
+if [ -z "${MAC_TRUST_CERT_BASE64-}" ] || [ -z "${MAC_SIGNING_CERT_BASE64-}" ] || [ -z "${MAC_SIGNING_CERT_PASSWORD-}" ]; then
+  echo "WARNING: macOS NE signing secrets are not available. Skipping NE build."
+  exit 0
+fi
+
 # Hold on to current directory
 PROJECT_DIR=$(pwd)
 DEPLOY_DIR=$PROJECT_DIR/deploy
