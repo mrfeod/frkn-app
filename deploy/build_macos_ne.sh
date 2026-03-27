@@ -20,9 +20,9 @@ BUILD_DIR=$DEPLOY_DIR/build-macos
 echo "Project dir: ${PROJECT_DIR}" 
 echo "Build dir: ${BUILD_DIR}"
 
-APP_NAME=AmneziaVPN
+APP_NAME=FRKN
 APP_FILENAME=$APP_NAME.app
-APP_DOMAIN=org.amneziavpn.package
+APP_DOMAIN=org.frkn.package
 PLIST_NAME=$APP_NAME.plist
 
 OUT_APP_DIR=$BUILD_DIR/client
@@ -110,9 +110,9 @@ echo "xcode build"
 xcodebuild \
 "OTHER_CODE_SIGN_FLAGS=--keychain '$KEYCHAIN_FILE'" \
 -configuration Release \
--scheme AmneziaVPN \
+-scheme FRKN \
 -destination "platform=macOS" \
--project $PROJECT_DIR/build-macos/AmneziaVPN.xcodeproj
+-project $PROJECT_DIR/build-macos/FRKN.xcodeproj
 
 
 # Restore keychain to default

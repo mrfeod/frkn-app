@@ -64,26 +64,26 @@ jobs:
         bash deploy/build_linux.sh
 
     - name: 'Pack installer'
-      run: cd deploy && tar -cf AmneziaVPN_Linux_Installer.tar AmneziaVPN_Linux_Installer.bin && zip AmneziaVPN_${VERSION}_linux_x64.tar.zip AmneziaVPN_Linux_Installer.tar
+      run: cd deploy && tar -cf FRKN_Linux_Installer.tar FRKN_Linux_Installer.bin && zip FRKN_${VERSION}_linux_x64.tar.zip FRKN_Linux_Installer.tar
 
     - name: 'Upload installer artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_${{ env.VERSION }}_linux_x64.tar.zip
-        path: deploy/AmneziaVPN_${{ env.VERSION }}_linux_x64.tar.zip
+        name: FRKN_${{ env.VERSION }}_linux_x64.tar.zip
+        path: deploy/FRKN_${{ env.VERSION }}_linux_x64.tar.zip
         retention-days: 7
 
     - name: 'Upload unpacked artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_Linux_unpacked
+        name: FRKN_Linux_unpacked
         path: deploy/AppDir
         retention-days: 7
 
     - name: 'Upload translations artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_translations
+        name: FRKN_translations
         path: client/translations
         retention-days: 7
 
@@ -170,26 +170,26 @@ jobs:
     - name: 'Rename Windows installer'
       shell: cmd
       run: |
-        copy AmneziaVPN_x${{ env.BUILD_ARCH }}.exe AmneziaVPN_%VERSION%_x64.exe
+        copy FRKN_x${{ env.BUILD_ARCH }}.exe FRKN_%VERSION%_x64.exe
 
     - name: 'Upload installer artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_${{ env.VERSION }}_x64.exe
-        path: AmneziaVPN_${{ env.VERSION }}_x64.exe
+        name: FRKN_${{ env.VERSION }}_x64.exe
+        path: FRKN_${{ env.VERSION }}_x64.exe
         retention-days: 7
 
     - name: 'Upload MSI installer artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_Windows_MSI_installer
-        path: AmneziaVPN_x${{ env.BUILD_ARCH }}.msi
+        name: FRKN_Windows_MSI_installer
+        path: FRKN_x${{ env.BUILD_ARCH }}.msi
         retention-days: 7
 
     - name: 'Upload unpacked artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_Windows_unpacked
+        name: FRKN_Windows_unpacked
         path: deploy\\build_${{ env.BUILD_ARCH }}\\client\\Release
         retention-days: 7
 
@@ -361,15 +361,15 @@ jobs:
     - name: 'Upload installer artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_MacOS_old_installer
-        path: deploy/build/pkg/AmneziaVPN.pkg
+        name: FRKN_MacOS_old_installer
+        path: deploy/build/pkg/FRKN.pkg
         retention-days: 7
 
     - name: 'Upload unpacked artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_MacOS_old_unpacked
-        path: deploy/build/client/AmneziaVPN.app
+        name: FRKN_MacOS_old_unpacked
+        path: deploy/build/client/FRKN.app
         retention-days: 7
 
 # ------------------------------------------------------
@@ -446,21 +446,21 @@ jobs:
     - name: 'Pack macOS installer'
       run: |
         cd deploy/build/pkg
-        zip -r ../../AmneziaVPN_${VERSION}_macos.zip AmneziaVPN.pkg
+        zip -r ../../FRKN_${VERSION}_macos.zip FRKN.pkg
         cd ../../..
 
     - name: 'Upload installer artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_${{ env.VERSION }}_macos.zip
-        path: deploy/AmneziaVPN_${{ env.VERSION }}_macos.zip
+        name: FRKN_${{ env.VERSION }}_macos.zip
+        path: deploy/FRKN_${{ env.VERSION }}_macos.zip
         retention-days: 7
 
     - name: 'Upload unpacked artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_MacOS_unpacked
-        path: deploy/build/client/AmneziaVPN.app
+        name: FRKN_MacOS_unpacked
+        path: deploy/build/client/FRKN.app
         retention-days: 7
 
   Build-MacOS-NE:
@@ -530,8 +530,8 @@ jobs:
     - name: 'Upload unpacked artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_MacOS_unpacked
-        path: deploy/build/client/AmneziaVPN.app
+        name: FRKN_MacOS_NE_unpacked
+        path: deploy/build-macos/client/FRKN.app
         retention-days: 7
 
 # ------------------------------------------------------
@@ -665,49 +665,49 @@ jobs:
     - name: 'Rename Android APKs'
       run: |
         cd deploy/build
-        mv AmneziaVPN-x86_64-release.apk AmneziaVPN_${VERSION}_android9+_x86_64.apk
-        mv AmneziaVPN-x86-release.apk AmneziaVPN_${VERSION}_android9+_x86.apk
-        mv AmneziaVPN-arm64-v8a-release.apk AmneziaVPN_${VERSION}_android9+_arm64-v8a.apk
-        mv AmneziaVPN-armeabi-v7a-release.apk AmneziaVPN_${VERSION}_android9+_armeabi-v7a.apk
+        mv FRKN-x86_64-release.apk FRKN_${VERSION}_android9+_x86_64.apk
+        mv FRKN-x86-release.apk FRKN_${VERSION}_android9+_x86.apk
+        mv FRKN-arm64-v8a-release.apk FRKN_${VERSION}_android9+_arm64-v8a.apk
+        mv FRKN-armeabi-v7a-release.apk FRKN_${VERSION}_android9+_armeabi-v7a.apk
         cd ../..
 
     - name: 'Upload x86_64 apk'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_${{ env.VERSION }}_android9+_x86_64.apk
-        path: deploy/build/AmneziaVPN_${{ env.VERSION }}_android9+_x86_64.apk
+        name: FRKN_${{ env.VERSION }}_android9+_x86_64.apk
+        path: deploy/build/FRKN_${{ env.VERSION }}_android9+_x86_64.apk
         compression-level: 0
         retention-days: 7
 
     - name: 'Upload x86 apk'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_${{ env.VERSION }}_android9+_x86.apk
-        path: deploy/build/AmneziaVPN_${{ env.VERSION }}_android9+_x86.apk
+        name: FRKN_${{ env.VERSION }}_android9+_x86.apk
+        path: deploy/build/FRKN_${{ env.VERSION }}_android9+_x86.apk
         compression-level: 0
         retention-days: 7
 
     - name: 'Upload arm64-v8a apk'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_${{ env.VERSION }}_android9+_arm64-v8a.apk
-        path: deploy/build/AmneziaVPN_${{ env.VERSION }}_android9+_arm64-v8a.apk
+        name: FRKN_${{ env.VERSION }}_android9+_arm64-v8a.apk
+        path: deploy/build/FRKN_${{ env.VERSION }}_android9+_arm64-v8a.apk
         compression-level: 0
         retention-days: 7
 
     - name: 'Upload armeabi-v7a apk'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN_${{ env.VERSION }}_android9+_armeabi-v7a.apk
-        path: deploy/build/AmneziaVPN_${{ env.VERSION }}_android9+_armeabi-v7a.apk
+        name: FRKN_${{ env.VERSION }}_android9+_armeabi-v7a.apk
+        path: deploy/build/FRKN_${{ env.VERSION }}_android9+_armeabi-v7a.apk
         compression-level: 0
         retention-days: 7
 
     - name: 'Upload aab'
       uses: actions/upload-artifact@v4
       with:
-        name: AmneziaVPN-android
-        path: deploy/build/AmneziaVPN-release.aab
+        name: FRKN-android
+        path: deploy/build/FRKN-release.aab
         compression-level: 0
         retention-days: 7
 
