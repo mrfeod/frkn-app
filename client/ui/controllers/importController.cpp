@@ -180,6 +180,23 @@ bool ImportController::extractConfigFromData(QString data)
         }
     }
 
+    // Try multi-line protocol URL list (plain text)
+    {
+        QStringList lines = config.split('\n', Qt::SkipEmptyParts);
+        if (lines.size() >= 2) {
+            auto result = processConfigLines(config);
+            if (result != ProcessResult::NoConfigs) {
+                switch (result) {
+                case ProcessResult::AllDuplicates: emit subscriptionAllDuplicates(); break;
+                case ProcessResult::SingleConfig: emit qrDecodingFinished(); break;
+                case ProcessResult::MultipleConfigs: emit subscriptionConfigsReady(m_subscriptionConfigs.size()); break;
+                default: break;
+                }
+                return false;
+            }
+        }
+    }
+
     m_configType = checkConfigFormat(config);
     if (m_configType == ConfigTypes::Invalid) {
         config.replace("vpn://", "");
@@ -190,6 +207,35 @@ bool ImportController::extractConfigFromData(QString data)
         }
 
         config = ba;
+
+        // After base64 decode, try single protocol URL
+        {
+            QJsonObject singleConfig;
+            if (parseConfigLine(config, singleConfig)) {
+                m_config = singleConfig;
+                return true;
+            }
+        }
+
+        // After base64 decode, try multi-line protocol URL list
+        {
+            QStringList lines = config.split('\n', Qt::SkipEmptyParts);
+            if (lines.size() >= 2) {
+                auto result = processConfigLines(config);
+                if (result != ProcessResult::NoConfigs) {
+                    switch (result) {
+                    case ProcessResult::AllDuplicates: emit subscriptionAllDuplicates(); break;
+                    case ProcessResult::SingleConfig: emit qrDecodingFinished(); break;
+                    case ProcessResult::MultipleConfigs:
+                        emit subscriptionConfigsReady(m_subscriptionConfigs.size());
+                        break;
+                    default: break;
+                    }
+                    return false;
+                }
+            }
+        }
+
         m_configType = checkConfigFormat(config);
     }
 
@@ -248,6 +294,30 @@ bool ImportController::extractConfigFromData(QString data)
 
 bool ImportController::extractConfigFromQr(const QByteArray &data)
 {
+    // Try interpreting as a protocol URL (vless://, vmess://, trojan://, ss://)
+    {
+        QString textData = QString::fromUtf8(data).trimmed();
+        QJsonObject config;
+        if (parseConfigLine(textData, config)) {
+            m_config = config;
+            return true;
+        }
+
+        // Try multi-line protocol URL list
+        QStringList lines = textData.split('\n', Qt::SkipEmptyParts);
+        if (lines.size() >= 2) {
+            auto result = processConfigLines(textData);
+            if (result == ProcessResult::SingleConfig) {
+                return true;
+            }
+            if (result == ProcessResult::MultipleConfigs || result == ProcessResult::AllDuplicates) {
+                // Signals will be emitted by the caller (parseQrCodeChunk)
+                return false;
+            }
+        }
+    }
+
+    // Try Amnezia JSON format
     QJsonObject dataObj = QJsonDocument::fromJson(data).object();
     if (!dataObj.isEmpty()) {
         m_config = dataObj;
@@ -701,6 +771,39 @@ bool ImportController::parseQrCodeChunk(const QString &code)
             }
         }
     } else {
+        // First, try raw QR string as a protocol URL or config list
+        QJsonObject singleConfig;
+        if (parseConfigLine(code, singleConfig)) {
+            m_config = singleConfig;
+            m_isQrCodeProcessed = false;
+            stopDecodingQr();
+            return true;
+        }
+
+        // Try raw QR string as multi-line config list
+        {
+            QStringList lines = code.split('\n', Qt::SkipEmptyParts);
+            if (lines.size() >= 2) {
+                auto result = processConfigLines(code);
+                if (result == ProcessResult::SingleConfig) {
+                    m_isQrCodeProcessed = false;
+                    stopDecodingQr();
+                    return true;
+                }
+                if (result == ProcessResult::MultipleConfigs) {
+                    m_isQrCodeProcessed = false;
+                    emit subscriptionConfigsReady(m_subscriptionConfigs.size());
+                    return true;
+                }
+                if (result == ProcessResult::AllDuplicates) {
+                    m_isQrCodeProcessed = false;
+                    emit subscriptionAllDuplicates();
+                    return true;
+                }
+            }
+        }
+
+        // Fallback: try Amnezia binary QR format (base64-decoded data)
         bool ok = extractConfigFromQr(ba);
         if (ok) {
             m_isQrCodeProcessed = false;
@@ -802,6 +905,7 @@ bool ImportController::parseConfigLine(const QString &line, QJsonObject &outConf
     QString prefix;
     QString errormsg;
     QJsonObject json;
+    ConfigTypes configType = ConfigTypes::Xray;
 
     if (trimmed.startsWith("vless://")) {
         json = serialization::vless::Deserialize(trimmed, &prefix, &errormsg);
@@ -812,24 +916,21 @@ bool ImportController::parseConfigLine(const QString &line, QJsonObject &outConf
     } else if (trimmed.startsWith("trojan://")) {
         json = serialization::trojan::Deserialize(trimmed, &prefix, &errormsg);
     } else if (trimmed.startsWith("ss://") && !trimmed.contains("plugin=")) {
-        m_configType = ConfigTypes::ShadowSocks;
+        configType = ConfigTypes::ShadowSocks;
         json = serialization::ss::Deserialize(trimmed, &prefix, &errormsg);
-        m_configType = ConfigTypes::Xray;
-        return !outConfig.isEmpty();
+    } else {
+        return false;
     }
 
+    auto savedType = m_configType;
+    m_configType = configType;
     outConfig = extractXrayConfig(Utils::JsonToString(json, QJsonDocument::JsonFormat::Compact), prefix);
+    m_configType = savedType;
     return !outConfig.isEmpty();
 }
 
-void ImportController::handleSubscriptionResponse(const QByteArray &responseData)
+ImportController::ProcessResult ImportController::processConfigLines(const QString &configText)
 {
-    QByteArray decoded = QByteArray::fromBase64(responseData);
-    if (decoded.isEmpty()) {
-        decoded = responseData;
-    }
-
-    QString configText = QString::fromUtf8(decoded);
     QStringList lines = configText.split('\n', Qt::SkipEmptyParts);
 
     m_subscriptionConfigs = QJsonArray();
@@ -873,30 +974,41 @@ void ImportController::handleSubscriptionResponse(const QByteArray &responseData
                 existingConfigs.insert(lc);
             m_subscriptionConfigs.append(config);
             parsed++;
-        } else {
         }
     }
 
-    if (totalParsed == 0) {
-        emit subscriptionErrorOccurred(tr("No valid configurations found at the provided URL"));
-        return;
-    }
+    if (totalParsed == 0)
+        return ProcessResult::NoConfigs;
 
-    if (parsed == 0) {
-        // All configs are duplicates — not an error
-        emit subscriptionAllDuplicates();
-        return;
-    }
+    if (parsed == 0)
+        return ProcessResult::AllDuplicates;
 
     if (parsed == 1) {
         m_config = m_subscriptionConfigs.first().toObject();
         m_configType = ConfigTypes::Xray;
         m_subscriptionConfigs = QJsonArray();
-        emit qrDecodingFinished();
-        return;
+        return ProcessResult::SingleConfig;
     }
 
-    emit subscriptionConfigsReady(parsed);
+    return ProcessResult::MultipleConfigs;
+}
+
+void ImportController::handleSubscriptionResponse(const QByteArray &responseData)
+{
+    QByteArray decoded = QByteArray::fromBase64(responseData);
+    if (decoded.isEmpty()) {
+        decoded = responseData;
+    }
+
+    auto result = processConfigLines(QString::fromUtf8(decoded));
+    switch (result) {
+    case ProcessResult::NoConfigs:
+        emit subscriptionErrorOccurred(tr("No valid configurations found at the provided URL"));
+        break;
+    case ProcessResult::AllDuplicates: emit subscriptionAllDuplicates(); break;
+    case ProcessResult::SingleConfig: emit qrDecodingFinished(); break;
+    case ProcessResult::MultipleConfigs: emit subscriptionConfigsReady(m_subscriptionConfigs.size()); break;
+    }
 }
 
 void ImportController::fetchAndImportFromUrl(const QString &url)

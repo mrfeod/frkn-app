@@ -82,6 +82,9 @@ private:
     void processAmneziaConfig(QJsonObject &config);
 
     bool parseConfigLine(const QString &line, QJsonObject &outConfig);
+
+    enum class ProcessResult { NoConfigs, AllDuplicates, SingleConfig, MultipleConfigs };
+    ProcessResult processConfigLines(const QString &configText);
     void handleSubscriptionResponse(const QByteArray &responseData);
 
 #if defined Q_OS_ANDROID || defined Q_OS_IOS
