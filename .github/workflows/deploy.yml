@@ -544,7 +544,7 @@ jobs:
 # ------------------------------------------------------
 
   Build-Android:
-    runs-on: android-runner
+    runs-on: ubuntu-latest
 
     env:
       ANDROID_BUILD_PLATFORM: android-36
