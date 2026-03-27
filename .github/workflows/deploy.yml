@@ -10,7 +10,7 @@ env:
 
 jobs:
   Build-Linux-Ubuntu:
-    runs-on: android-runner
+    runs-on: ubuntu-latest
 
     env:
       QT_VERSION: 6.10.1
